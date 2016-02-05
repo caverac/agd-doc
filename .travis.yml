@@ -4,5 +4,5 @@ python:
 # command to install dependencies
 install: 
     - pip install gausspy/.
-script:
+script: nosetests
 
