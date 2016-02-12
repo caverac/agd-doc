@@ -167,14 +167,15 @@ We will begin with a one-phase decomposition (two-phase decompositon will be exp
     # One phase training
     g.set('phase', 'one')
 
-Next, we set the signal to noise ratio (SNR) threshold below which AGD will not be allowed to include Gaussian functions in the model:
+Next, we set the signal-to-noise ratio (SNR) threshold below which AGD will not be allowed to include Gaussian components in the model:
 
 .. code-block:: python
 
     # threshold below which Gaussian components will not be fit
     g.set('SNR_thresh', 5.)
 
-Finally, we specify an initial guess for the $\alpha$ value [**how close does this have to be?] and begint he training process:
+Finally, we specify an initial guess for the math:`\alpha` value
+[**how close does this have to be?**] and begin the training process:
 
 .. code-block:: python
 
@@ -190,9 +191,3 @@ Once the training is completed, we can view the "trained" value of alpha by look
     # get the parameters attribute of g, which is a dictionary of important
     # variables
     print(g.p['alpha1'])
-
-
-
-
-
-

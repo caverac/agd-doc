@@ -355,7 +355,7 @@ to the training dataset and compare the results with the known
 underlying decompositon to determine the optimal value for the
 smoothing parameter \(\alpha\).
 
-To begin, import GaussianDecomposer from GaussPy:
+To begin, import \code{GaussianDecomposer} from GaussPy:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{import} \PYG{n+nn}{gausspy.GaussianDecomposer} \PYG{k+kn}{as} \PYG{n+nn}{gp}
@@ -369,21 +369,22 @@ Next, load the training dataset for analysis:
 \PYG{n}{g}\PYG{o}{.}\PYG{n}{load\PYGZus{}training\PYGZus{}data}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{agd\PYGZus{}data.pickle}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
 \end{Verbatim}
 
-We will begin with a one-phase decomposition (two-phase decomposiiton will be explained in later sections):
+We will begin with a one-phase decomposition (two-phase decompositon will be explained in later sections):
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+c1}{\PYGZsh{} One phase training}
 \PYG{n}{g}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{phase}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{one}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
 \end{Verbatim}
 
-Next, we set the signal to noise ratio (SNR) threshold below which AGD will not be allowed to include Gaussian functions in the model:
+Next, we set the signal-to-noise ratio (SNR) threshold below which AGD will not be allowed to include Gaussian components in the model:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+c1}{\PYGZsh{} threshold below which Gaussian components will not be fit}
 \PYG{n}{g}\PYG{o}{.}\PYG{n}{set}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{SNR\PYGZus{}thresh}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mf}{5.}\PYG{p}{)}
 \end{Verbatim}
 
-Finally, we specify an initial guess for the \$alpha\$ value {[}{\color{red}\bfseries{}**}how close does this have to be?{]} and begint he training process:
+Finally, we specify an initial guess for the math:\emph{alpha} value
+{[}\textbf{how close does this have to be?}{]} and begin the training process:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+c1}{\PYGZsh{} initial guess for the alpha value}
@@ -399,6 +400,11 @@ Once the training is completed, we can view the ``trained'' value of alpha by lo
 \PYG{c+c1}{\PYGZsh{} variables}
 \PYG{k}{print}\PYG{p}{(}\PYG{n}{g}\PYG{o}{.}\PYG{n}{p}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{alpha1}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}\PYG{p}{)}
 \end{Verbatim}
+
+
+\chapter{Behind the Scenes}
+\label{method::doc}\label{method:method}\label{method:behind-the-scenes}
+A description of what AGD does ...
 
 
 \chapter{Indices and tables}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/MacPorts 2015_8) (preloaded format=pdflatex 2016.1.21)  12 FEB 2016 10:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/MacPorts 2015_8) (preloaded format=pdflatex 2016.1.21)  12 FEB 2016 10:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1020,30 +1020,38 @@ less on input line 300.
 
 ] [5] [6]
 Chapter 4.
-(./GaussPy.ind)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 421.
-
 
 Package Fancyhdr Warning: \fancyfoot's `E' option without twoside option is use
-less on input line 421.
+less on input line 410.
 
 [7
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 421.
+Chapter 5.
+(./GaussPy.ind)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 427.
+
+
+Package Fancyhdr Warning: \fancyfoot's `E' option without twoside option is use
+less on input line 427.
+
+[8
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 427.
  (./GaussPy.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 421.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 421.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 427.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 427.
 Package rerunfilecheck Info: File `GaussPy.out' has not changed.
-(rerunfilecheck)             Checksum: B367763210D5DF5AA89898CE177D636D;536.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 421.
+(rerunfilecheck)             Checksum: 4B14E9B420798BEC041E02CFD59B5900;589.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 427.
  ) 
 Here is how much of TeX's memory you used:
- 9421 strings out of 494185
- 131981 string characters out of 6156888
- 233319 words of memory out of 5000000
- 12413 multiletter control sequences out of 15000+600000
- 60789 words of font info for 79 fonts, out of 8000000 for 9000
+ 9428 strings out of 494185
+ 132068 string characters out of 6156888
+ 233439 words of memory out of 5000000
+ 12417 multiletter control sequences out of 15000+600000
+ 61925 words of font info for 80 fonts, out of 8000000 for 9000
  431 hyphenation exceptions out of 8191
  36i,18n,45p,772b,405s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/opt/local/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</opt/local/share
@@ -1058,11 +1066,12 @@ pfb></opt/local/share/texmf-texlive/fonts/type1/urw/courier/ucrro8a.pfb></opt/l
 ocal/share/texmf-texlive/fonts/type1/urw/helvetic/uhvb8a.pfb></opt/local/share/
 texmf-texlive/fonts/type1/urw/helvetic/uhvbo8a.pfb></opt/local/share/texmf-texl
 ive/fonts/type1/urw/times/utmb8a.pfb></opt/local/share/texmf-texlive/fonts/type
-1/urw/times/utmr8a.pfb>
-Output written on GaussPy.pdf (9 pages, 160224 bytes).
+1/urw/times/utmr8a.pfb></opt/local/share/texmf-texlive/fonts/type1/urw/times/ut
+mri8a.pfb>
+Output written on GaussPy.pdf (10 pages, 167816 bytes).
 PDF statistics:
- 178 PDF objects out of 1000 (max. 8388607)
- 147 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 93 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 191 PDF objects out of 1000 (max. 8388607)
+ 158 compressed objects within 2 object streams
+ 34 named destinations out of 1000 (max. 500000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
 
