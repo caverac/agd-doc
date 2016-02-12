@@ -214,7 +214,7 @@ parameters drawn from known distributions with known
 uncertainties. For example, we can create a mock dataset with
 \code{NSPECTRA}-realizations of the function
 \phantomsection\label{tutorial:equation-spectra}\begin{gather}
-\begin{split}S(x_i) = \sum_{k=1}^{\texttt{NCOMPS}} {\texttt{AMP}_k} \exp\left[-\frac{8\ln 2 (x
+\begin{split}S(x_i) = \sum_{k=1}^{\texttt{NCOMPS}} {\texttt{AMP}_k} \exp\left[-\frac{4\ln 2 (x_i
 - \texttt{MEAN}_k)^2}{\texttt{FWHM}_k^2} \right] + \texttt{NOISE},
   \qquad i = 1, \cdots, \texttt{NCHANNELS}\end{split}\label{tutorial-spectra}
 \end{gather}
@@ -224,11 +224,45 @@ where
 \code{NSPECTRA} is then the number of synthetic spectra to be created
 
 \item {} 
-\code{AMP} \(\sim \mu\)
+\code{NCOMPS} is the number of components in each synthetic spectrum
+
+\item {} 
+\code{(AMP, MEAN, FWHM)} are the parameters of each Gaussian component
+
+\item {} 
+\code{NOISE} is the level of noise introduced in each spectrum
 
 \end{enumerate}
 
-For example, you can specify the relevant parameters in the following way:
+In the next example we will show how to implement this in python. We
+have made the following assumptions
+\begin{enumerate}
+\item {} 
+\(\mathrm{NOISE} \sim N(0, {\rm RMS}) + f \times {\rm RMS}\)
+with \code{RMS=0.05} and \(f=0\)
+
+\item {} 
+\code{NCOMPS = 4} \textbf{This number is fixed, i.e. not random}
+
+\item {} 
+\code{NCHANNELS = 512} This number sets the resolution of each
+spectrum. \textbf{Does this number need to be the same for all spectra in
+AGD?}
+
+\item {} 
+\(\mathrm{AMP} \sim \mu(5 \mathrm{RMS}, 25 \mathrm{RMS})\),
+this way we ensure that every spectral feature is above the noise
+level. Spectra with a more dominant contribution from the noise can
+also be generated and used as training sets for AGD
+
+\item {} 
+\(\mathrm{FWHM} \sim \mu(10, 35)\) and \(\mathrm{MEAN}
+\sim \mu(0.25, 0.75) \times \mathrm{NCHANNELS}\), note that for our
+choice of the number of channels, this selection of \code{FWHM}
+ensures that even the wider component can be fit within the
+spectrum.
+
+\end{enumerate}
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+c1}{\PYGZsh{} GaussPy Example 1}
@@ -265,9 +299,21 @@ For example, you can specify the relevant parameters in the following way:
 \PYG{n}{FILENAME} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{agd\PYGZus{}data\PYGZus{}science.pickle}\PYG{l+s+s1}{\PYGZsq{}}
 \end{Verbatim}
 
-With the above parameters specified, we can proceed with constructing a set of synthetic training data composed of Gaussian functions with known parameters (i.e., for which we know the ``true'' decompositon), sampled randomly from the parameter ranges specified above. The resulting data, including the channel values, spectral values and error estimates, are stored in the pickle file specified above. If we want this to be a training set (TRAINING\_SET = True), the ``true'' decomposition answers for estimating the accuracy of a decomposition are also stored in the output file. For example, to construct a synthetic dataset:
+With the above parameters specified, we can proceed with constructing
+a set of synthetic training data composed of Gaussian functions with
+known parameters (i.e., for which we know the ``true'' decompositon),
+sampled randomly from the parameter ranges specified above. The
+resulting data, including the channel values, spectral values and
+error estimates, are stored in the pickle file specified above. If we
+want this to be a training set (\code{TRAINING\_SET = True}), the ``true''
+decomposition answers for estimating the accuracy of a decomposition
+are also stored in the output file. For example, to construct a
+synthetic dataset:
 
 \begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} GaussPy Example 1}
+\PYG{c+c1}{\PYGZsh{} Create spectra with Gaussian profiles \PYGZhy{}cont\PYGZhy{}}
+
 \PYG{c+c1}{\PYGZsh{} Initialize}
 \PYG{n}{agd\PYGZus{}data} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{p}{\PYGZcb{}}
 \PYG{n}{chan} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n}{NCHANNELS}\PYG{p}{)}
@@ -304,7 +350,10 @@ With the above parameters specified, we can proceed with constructing a set of s
 
 \section{Training the Algorithm}
 \label{tutorial:training-the-algorithm}
-With a real or synthetic training dataset in hand, we will apply AGD to the training dataset and compare the results with the known underlying decompositon to determine the optimal value for the smoothing parameter \$alpha\$.
+With a real or synthetic training dataset in hand, we will apply AGD
+to the training dataset and compare the results with the known
+underlying decompositon to determine the optimal value for the
+smoothing parameter \(\alpha\).
 
 To begin, import GaussianDecomposer from GaussPy:
 

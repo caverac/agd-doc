@@ -24,10 +24,35 @@ where
 
 1. ``NSPECTRA`` is then the number of synthetic spectra to be created
 
-2. ``NCOMPS`` :math:`\sim \mu(A_1, A_2)`
-2. ``FWHM``
- 
-For example, you can specify the relevant parameters in the following way:
+2. ``NCOMPS`` is the number of components in each synthetic spectrum
+
+3. ``(AMP, MEAN, FWHM)`` are the parameters of each Gaussian component
+
+4. ``NOISE`` is the level of noise introduced in each spectrum
+
+In the next example we will show how to implement this in python. We
+have made the following assumptions
+
+1. :math:`\mathrm{NOISE} \sim N(0, {\rm RMS}) + f \times {\rm RMS}`
+   with ``RMS=0.05`` and :math:`f=0`
+
+2. ``NCOMPS = 4`` **This number is fixed, i.e. not random**
+
+3. ``NCHANNELS = 512`` This number sets the resolution of each
+   spectrum. **Does this number need to be the same for all spectra in
+   AGD?**
+
+4. :math:`\mathrm{AMP} \sim \mu(5 \mathrm{RMS}, 25 \mathrm{RMS})`,
+   this way we ensure that every spectral feature is above the noise
+   level. Spectra with a more dominant contribution from the noise can
+   also be generated and used as training sets for AGD
+
+5. :math:`\mathrm{FWHM} \sim \mu(10, 35)` and :math:`\mathrm{MEAN}
+   \sim \mu(0.25, 0.75) \times \mathrm{NCHANNELS}`, note that for our
+   choice of the number of channels, this selection of ``FWHM``
+   ensures that even the wider component can be fit within the
+   spectrum.
+
 
 .. code-block:: python
 
@@ -64,9 +89,21 @@ For example, you can specify the relevant parameters in the following way:
     # Specify the pickle file to store the results in
     FILENAME = 'agd_data_science.pickle'
 
-With the above parameters specified, we can proceed with constructing a set of synthetic training data composed of Gaussian functions with known parameters (i.e., for which we know the "true" decompositon), sampled randomly from the parameter ranges specified above. The resulting data, including the channel values, spectral values and error estimates, are stored in the pickle file specified above. If we want this to be a training set (TRAINING_SET = True), the "true" decomposition answers for estimating the accuracy of a decomposition are also stored in the output file. For example, to construct a synthetic dataset:
+With the above parameters specified, we can proceed with constructing
+a set of synthetic training data composed of Gaussian functions with
+known parameters (i.e., for which we know the "true" decompositon),
+sampled randomly from the parameter ranges specified above. The
+resulting data, including the channel values, spectral values and
+error estimates, are stored in the pickle file specified above. If we
+want this to be a training set (``TRAINING_SET = True``), the "true"
+decomposition answers for estimating the accuracy of a decomposition
+are also stored in the output file. For example, to construct a
+synthetic dataset:
 
 .. code-block:: python
+
+    # GaussPy Example 1
+    # Create spectra with Gaussian profiles -cont-
 
     # Initialize
     agd_data = {}
@@ -104,9 +141,12 @@ With the above parameters specified, we can proceed with constructing a set of s
 Training the Algorithm
 ----------------------------
 
-With a real or synthetic training dataset in hand, we will apply AGD to the training dataset and compare the results with the known underlying decompositon to determine the optimal value for the smoothing parameter $\alpha$.
+With a real or synthetic training dataset in hand, we will apply AGD
+to the training dataset and compare the results with the known
+underlying decompositon to determine the optimal value for the
+smoothing parameter :math:`\alpha`.
 
-To begin, import GaussianDecomposer from GaussPy:
+To begin, import ``GaussianDecomposer`` from GaussPy:
 
 .. code-block:: python
 
@@ -120,7 +160,7 @@ Next, load the training dataset for analysis:
 
     g.load_training_data('agd_data.pickle')
 
-We will begin with a one-phase decomposition (two-phase decomposiiton will be explained in later sections):
+We will begin with a one-phase decomposition (two-phase decompositon will be explained in later sections):
 
 .. code-block:: python
 
