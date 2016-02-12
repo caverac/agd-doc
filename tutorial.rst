@@ -4,12 +4,30 @@
 Quickstart Tutorial
 ===================
 
-Before applying AGD to your data using GaussPy, you must first train the AGD algorithm to determine the optimal value of the smoothing parameter $\alpha$. This training requires you to apply AGD to a dataset with known underlying Gaussian decomposition. In other words, you need to have a training dataset for which you know (or have an estimate of) the true Gaussian model. This training dataset can be composed of real (i.e. previously analyzed) or synthetically-constructed data, for which you have prior inofmraiton about the underlying correct decomposition. This prior information is used to maximize the model accuracy by calibrating the $\alpha$ parameter used by AGD.
+Before applying AGD to your data using GaussPy, you must first train the AGD algorithm to determine the optimal value of the smoothing parameter :math:`\alpha`. This training requires you to apply AGD to a dataset with known underlying Gaussian decomposition. In other words, you need to have a training dataset for which you know (or have an estimate of) the true Gaussian model. This training dataset can be composed of real (i.e. previously analyzed) or synthetically-constructed data, for which you have prior inofmraiton about the underlying correct decomposition. This prior information is used to maximize the model accuracy by calibrating the :math:`\alpha` parameter used by AGD.
 
 Creating a Synthetic Training Dataset
 ----------------------------
 
-Training datasets can be constructed by adding Gaussian functions with parameters drawn from known distributions with known uncertainties. For example, you can specify the relevant parameters in the following way:
+Training datasets can be constructed by adding Gaussian functions with
+parameters drawn from known distributions with known
+uncertainties. For example, we can create a mock dataset with
+``NSPECTRA``-realizations of the function
+
+.. math:: 
+   S(x_i) = \sum_{k=1}^{\texttt{NCOMPS}} {\texttt{AMP}_k} \exp\left[-\frac{4\ln 2 (x_i
+   - \texttt{MEAN}_k)^2}{\texttt{FWHM}_k^2} \right] + \texttt{NOISE},
+     \qquad i = 1, \cdots, \texttt{NCHANNELS}
+   :label: spectra
+
+where 
+
+1. ``NSPECTRA`` is then the number of synthetic spectra to be created
+
+2. ``NCOMPS`` :math:`\sim \mu(A_1, A_2)`
+2. ``FWHM``
+ 
+For example, you can specify the relevant parameters in the following way:
 
 .. code-block:: python
 
