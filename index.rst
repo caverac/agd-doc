@@ -14,7 +14,7 @@ Contents:
    intro
    install
    tutorial
-
+   method
 
 
 
