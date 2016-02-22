@@ -331,7 +331,7 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 .. code-block:: python
 
-    import gausspy.GaussianDecomposer as gp
+    import gausspy.gp as gp
 
     # Set necessary parameters
     FILENAME = 'agd_data.pickle'
@@ -345,7 +345,7 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
     # Set GaussPy parameters
     g.set('phase', 'one')
-    g.set('SNR_thresh', 5.)
+    g.set('SNR_thresh', snr_thresh)
 
     # Train AGD starting with initial guess for alpha
     g.train(alpha1_initial = alpha1, plot=False,
