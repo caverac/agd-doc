@@ -43,10 +43,9 @@ Download GaussPy from...
 Installing GaussPy
 ------------
 
-To install make sure that all
-dependences are already installed and properly linked to python
---python has to be able to load them--. Then cd to the local directory
-containing gausspy and type
+To install make sure that all dependences are already installed and properly
+linked to python --python has to be able to load them--. Then cd to the local
+directory containing gausspy and type
 
 $ python setup.py install
 
