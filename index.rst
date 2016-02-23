@@ -14,6 +14,7 @@ Contents:
    intro
    install
    tutorial
+   data_prep
    method
 
 
