@@ -51,6 +51,7 @@ libhdf5-serial-dev hdf5-tools -y
 Install pip for easy installation of python packages:
 
 $ sudo apt-get install python-pip
+
 $ sudo pip install --upgrade pip
 
 Install `scipy`:
@@ -77,10 +78,9 @@ $ sudo apt-get install -qq python-h5py -y
 Installing GaussPy
 ------------
 
-To install make sure that all
-dependences are already installed and properly linked to python
---python has to be able to load them--. Then cd to the local directory
-containing gausspy and type
+To install make sure that all dependences are already installed and properly
+linked to python --python has to be able to load them--. Then cd to the local
+directory containing gausspy and type
 
 $ python setup.py install
 
