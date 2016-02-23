@@ -51,6 +51,7 @@ libhdf5-serial-dev hdf5-tools -y
 Install pip for easy installation of python packages:
 
 $ sudo apt-get install python-pip
+
 $ sudo pip install --upgrade pip
 
 Install `scipy`:
