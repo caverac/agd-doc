@@ -1,11 +1,7 @@
 .. _tutorial:
 
-===================
-Quickstart Tutorial
-===================
-
-
-Simple Example
+=======================================
+Simple Example Tutorial
 =======================================
 
 Constructing a GaussPy-Friendly Dataset
@@ -43,44 +39,11 @@ have made the following assumptions:
 
 The following code describes an example of how to create spectrum with Gaussian shape and store the channels, amplitude and error arrays in a python pickle file to be read later by GaussPy.
 
-.. code-block:: python
+.. literalinclude:: simple_gaussian.py
+    :language: python
+    :lines: 1-34
 
-    # Create simple Gaussian profile with added noise
-    # Store in format required for GaussPy
-
-    import numpy as np
-    import pickle
-
-    def gaussian(amp, fwhm, mean):
-        return lambda x: amp * np.exp(-(x-mean)**2/4./(fwhm/2.355)**2)
-
-    # Data properties
-    RMS = 0.05
-    NCHANNELS = 512
-    FILENAME = 'simple_gaussian.pickle'
-    TRAINING_SET = True
-
-    # Component properties
-    AMP = 1.0
-    FWHM = 20
-    MEAN = 256
-
-    # Initialize
-    simple_gaussian = {}
-    chan = np.arange(NCHANNELS)
-    errors = chan * 0. + RMS # Constant noise for all spectra
-
-    spectrum = np.random.randn(NCHANNELS) * RMS
-    spectrum += gaussian(AMP, FWHM, MEAN)(chan)
-
-    # Enter results into AGD dataset
-    simple_gaussian['data_list'] = simple_gaussian.get('data_list', []) + [spectrum]
-    simple_gaussian['x_values'] = simple_gaussian.get('x_values', []) + [chan]
-    simple_gaussian['errors'] = simple_gaussian.get('errors', []) + [errors]
-
-    pickle.dump(simple_gaussian, open(FILENAME, 'w'))
-    print 'Created: ', FILENAME
-
+.. plot:: simple_gaussian.py
 
 Running GaussPy
 ----------------------------
@@ -88,7 +51,7 @@ With our simple dataset in hand, we can use GaussPy to decompose the spectrum in
 
 The following is an example code for running GaussPy. We will use the "one-phase" decomposition to begin with. We must specify the following parameters:
 
-1. ``alpha1``: our  guess for the value of :math:`\alpha`.
+1. ``alpha1``: our choice for the value of :math:`\alpha`.
 
 2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
 
@@ -149,80 +112,86 @@ The following is an example python script for plotting the original spectrum and
 
 2. ``DATA_decomposed``: the filename containing the GaussPy decomposition results.
 
-.. code-block:: python
+.. literalinclude:: simple_gaussian_plot.py
+    :language: python
 
-    # Plot GaussPy results
-    import numpy as np
-    import matplotlib.pyplot as plt
+.. plot:: simple_gaussian_plot.py
 
-    def gaussian(amp, fwhm, mean):
-        sigma = np.float(fwhm / (2. * np.sqrt(2. * np.log(2))))
-        return lambda x: amp * np.exp(-(x-mean)**2/2./sigma**2)
+Clearly the fit to the simple Gaussian spectrum is good. If we were to vary the value of :math:`\alpha`, the fit would not change significantly as the fit to a spectrum containing a single Gaussian funciton does not depend sensitively on the initial guesses, especially because GaussPy performs a least-squares fit after determining initial guesses for the fitted Gaussian parameters with AGD.
 
-    def unravel(list):
-        return np.array([i for array in list for i in array])
+We can now move on from the simple example above to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
 
-    DATA = 'simple_gaussian.pickle'
-    DATA_decomposed = 'simple_gaussian_decomposed.pickle'
+=============================
+Multiple Gaussians Example
+=============================
 
-    data = pickle.load(open(DATA))
-    spectrum = np.array(unravel(data['data_list']))
-    chan = np.array(unravel(data['x_values']))
-    errors = np.array(unravel(data['errors']))
 
-    decomposed_data = pickle.load(open(DATA_decomposed))
-    means_fit = unravel(decomposed_data['means_fit'])
-    amps_fit = unravel(decomposed_data['amplitudes_fit'])
-    fwhms_fit = unravel(decomposed_data['fwhms_fit'])
+Constructing a GaussPy-Friendly Dataset
+--------------------------------------
+As discussed in the Simple Example section above, before running GaussPy we must ensure that our data is in a format readable by GaussPy. In particular, for each spectrum, we need to provide the independent and dependent spectral arrays (i.e. channels and amplitudes) and an estimate of the uncertainity per channel. In the following example we will construct a spectrum containing multiple overlapping Gaussian components with added spectral noise, using Equation :eq:`spectra`, and plot the results.
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+We will make the following choices for parameters in this example:
 
-    model = chan * 0.
+1. ``NCOMPS = 3`` : to include 3 Gaussian functions in the spectrum
 
-    for j in range(len(means_fit)):
-        component = gaussian(amps_fit[j], fwhms_fit[j], means_fit[j])(chan)
-        model += component
-        ax.plot(chan, component, color='red', lw=1.5)
+2. ``AMPS = [3,2,1]`` : amplitudes of the included Gaussian functions
 
-    ax.plot(chan, spectrum, color='black', linewidth=1.5)
-    ax.plot(chan, model, color='purple', linewidth=2.)
-    ax.plot(chan, errors, color='green', linestyle='dashed', linewidth=2.)
-    ax.set_xlabel('Channels')
-    ax.set_ylabel('Amplitude')
+3. ``FWHMS = [10,20,30]`` : FWHM (in channels) of the included Gaussian functions
 
-    plt.show()
+4. ``MEANS = [10,20,30]`` : mean positions (in channels) of the included Gaussian functions
 
-Given the speed an efficiency of AGD, we can use the above examples to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
+5. ``NCHANNELS = 512`` : number of channels in the spectrum
 
-Training AGD to Select :math:`\alpha`
-=====================================
+6. ``RMS = 0.05`` : RMS noise per channel
+
+The following code provides an example of how to construct a Gaussian funtion with the above parameters and store it in GaussPy-friendly format.
+
+.. literalinclude:: multiple_gaussians.py
+    :language: python
+    :lines: 1-41
+
+A plot of the spectrum constructed above is included below.
+
+.. plot:: multiple_gaussians.py
+
+Running GaussPy
+----------------
+With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple example (Chaper 3), we begin by selecting a value :math:`\alpha=` to use in the decomposition. In this case we will select :math:`\alpha=20`. As before, the important parameters to specify are:
+
+1. ``alpha1``: our choice for the value of :math:`\alpha`.
+
+2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
+
+3. ``DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
+
+4. ``DATA_out``: filename to store the decomposition results from GaussPy.
+
+.. literalinclude:: multiple_gaussians_plot.py
+    :language: python
+    :lines: 1-25
+
+Plot Decomposition Results
+----------------------------
+
+Following the decomposition by GaussPy, we can explore the effect of the choice of :math:`\alpha` on the decomposition. Below, we have run GaussPy on the multiple-Gaussian dataset constructed above for three values of :math:`\alpha`, including :math:`\alpha=20, \alpha = 2` and :math:`\alpha=10`.
+
+.. plot:: multiple_gaussians_plot.py
+
+These results demonstrate that our choice of :math:`\alpha` has a significant effect on the success of the GaussPy model. In order to select the right value of :math:`\alpha` for a given dataset, we need to train the AGD algorithm using a training set. This process is described in the following section.
+
+
+=============================
+Training AGD to select :math:`\alpha`
+=============================
 
 Creating a Synthetic Training Dataset
 ----------------------------
 
 To select the optimal value of the smoothing parameter :math:`\alpha`, you must train the AGD algorithm using a training dataset with known underlying Gaussian decomposition. In other words, you need to have a dataset for which you know (or have an estimate of) the true Gaussian model. This training dataset can be composed of real (i.e. previously analyzed) or synthetically-constructed data, for which you have prior information about the underlying decomposition. This prior information is used to maximize the model accuracy by calibrating the :math:`\alpha` parameter used by AGD.
 
-Training datasets can be constructed by adding Gaussian functions with parameters drawn from known distributions with known uncertainties. For example, we can create a mock dataset with ``NSPECTRA``-realizations of the function
+Training datasets can be constructed by adding Gaussian functions with parameters drawn from known distributions with known uncertainties. For example, we can create a mock dataset with ``NSPECTRA``-realizations of Equation :eq:`spectra`.
 
-.. math:: 
-   S(x_i) = \sum_{k=1}^{\texttt{NCOMPS}} {\texttt{AMP}_k} \exp\left[-\frac{4\ln 2 (x_i
-   - \texttt{MEAN}_k)^2}{\texttt{FWHM}_k^2} \right] + \texttt{NOISE},
-     \qquad i = 1, \cdots, \texttt{NCHANNELS}
-   :label: spectra
-
-where 
-
-1. ``NSPECTRA`` is then the number of synthetic spectra to be created
-
-2. ``NCOMPS`` is the number of components in each synthetic spectrum
-
-3. ``(AMP, MEAN, FWHM)`` are the parameters of each Gaussian component
-
-4. ``NOISE`` is the level of noise introduced in each spectrum
-
-In the next example we will show how to implement this in python. We
-have made the following assumptions
+In the next example we will show how to implement this in python. We have made the following assumptions
 
 1. :math:`\mathrm{NOISE} \sim N(0, {\rm RMS}) + f \times {\rm RMS}`
    with ``RMS=0.05`` and :math:`f=0`
@@ -246,7 +215,6 @@ have made the following assumptions
 
 .. code-block:: python
 
-    # GaussPy Example 1
     # Create training dataset with Gaussian profiles
 
     import numpy as np
@@ -255,7 +223,7 @@ have made the following assumptions
     # Specify the number of spectral channels (NCHANNELS)
     NCHANNELS = 512
     # Specify the number of spectra (NSPECTRA)
-    NSPECTRA = 1000
+    NSPECTRA = 200
 
     # Estimate of the root-mean-square uncertainty per channel (RMS)
     RMS = 0.05
