@@ -6,31 +6,32 @@ Installation
 
 
 ------------
- Dependencies
+Dependencies
 ------------
 
-*  `Python 2.7 <http://www.numpy.org/>`_
+*  `python 2.7 <http://www.numpy.org/>`_
 
-* `Numpy <http://www.numpy.org/>`_
+* `numpy (\> v1.6.1) <http://www.numpy.org/>`_
 
-* `Scipy <http://www.scipy.org/>`_
+* `scipy (\> v0.17.0) <http://www.scipy.org/>`_
 
-* `h5py <http://www.h5py.org/>`_
+* `lmfit (\> v0.9.2) <https://lmfit.github.io/lmfit-py/intro.html>`_
 
-* `GNU Scientific Library (GSL) <http://www.gnu.org/software/gsl/>`_
+* `h5py (\> v2.0.1) <http://www.h5py.org/>`_
 
 
 If you do not already have Python 2.7, you can
 install the 
 `Anaconda Scientific Python distribution <https://store.continuum.io/cshop/anaconda/>`_, 
-which comes pre-loaded with Numpy, Scipy, and h5py.
+which comes pre-loaded with `numpy`, `scipy`, and `h5py`.
 
-To obtain GSL:
+---------------------
+Optional Dependencies
+---------------------
 
-.. code-block:: none
+* `matplotlib (\> v1.1.1) <http://matplotlib.org/>`_
 
-   sudo apt-get install libgsl0-dev
-
+* `GNU Scientific Library (GSL) <http://www.gnu.org/software/gsl/>`_
 
 ---------------
 Download GaussPy
@@ -38,45 +39,39 @@ Download GaussPy
 
 Download GaussPy from...
 
------------------------
-Installing Dependencies
------------------------
+--------------------------------
+Installing Dependencies on Linux
+--------------------------------
 
 You will need several libraries which the GSL, h5py, and scipy libraries depend
-on. 
+on. Install these required packages with:
 
-$ sudo apt-get install libblas-dev liblapack-dev gfortran libgsl0-dev
-libhdf5-serial-dev hdf5-tools -y
+.. code-block:: bash
+
+    sudo apt-get install libblas-dev liblapack-dev gfortran libgsl0-dev libhdf5-serial-dev hdf5-tools
 
 Install pip for easy installation of python packages:
 
-$ sudo apt-get install python-pip
+.. code-block:: bash
 
-$ sudo pip install --upgrade pip
+    sudo apt-get install python-pip
 
-Install `scipy`:
+Then install the required python packages:
 
-$ sudo pip install -I scipy==0.17.0
+.. code-block:: bash
 
-Install `lmfit`
+    sudo pip install scipy numpy h5py lmfit
 
-$ sudo pip install lmfit
+Install the optional dependencies for plotting and optimization:
 
-Install `numpy`
+.. code-block:: bash
 
-$ sudo apt-get install python-numpy -y
+    sudo pip install matplotlib
+    sudo apt-get install libgsl0-dev
 
-Install `matplotlib`
-
-$ sudo apt-get install -qq python-matplotlib -y
-
-Install `h5py`
-
-$ sudo apt-get install -qq python-h5py -y
-
-------------
+------------------
 Installing GaussPy
-------------
+------------------
 
 To install make sure that all dependences are already installed and properly
 linked to python --python has to be able to load them--. Then cd to the local
