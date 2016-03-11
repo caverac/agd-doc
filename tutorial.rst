@@ -181,7 +181,7 @@ These results demonstrate that our choice of :math:`\alpha` has a significant ef
 
 
 =============================
-Training AGD to select :math:`\alpha`
+Training AGD to select Alpha
 =============================
 
 Creating a Synthetic Training Dataset
@@ -330,7 +330,8 @@ Once the training is completed, we can view the "trained" value of alpha by look
     # variables
     print(g.p['alpha1'])
 
-Running AGD using Trained :math:`\alpha`
+========================================
+Running AGD using Trained Alpha
 ========================================
 
 With the trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. 
