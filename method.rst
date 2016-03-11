@@ -61,33 +61,42 @@ also need to ensure that the curvature has a minimum at this location.
 * This is achived by imposing two additional constraints on
   :math:`f(x)`
 
-.. math::  
-   :nowrap:
+.. math:: \left.\frac{{\rm d}^3f}{{\rm d}x^3}\right|_{x=x^*} = 0
+   :label: f3const
 
-      \begin{eqnarray}
-      \left.\frac{{\rm d}^3f}{{\rm d}x^3}\right|_{x=x^*}  &=& 0
-      \nonumber \\
-      \left.\frac{{\rm d}^4f}{{\rm d}x^4}\right|_{x=x^*}  &>& 0
-      \end{eqnarray}
-      
+.. math:: \left.\frac{{\rm d}^4f}{{\rm d}x^4}\right|_{x=x^*} > 0
+   :label: f4const
+            
 
 These 4 constraints then ensure that the point :math:`x^*` is a local
 minimum of the curvature. Furthermore, even in the presence of both
 blending and noise, these expressions will yield the location of all
 the points that are possible canditates for the positions of Gaussian
-components in the target function. Fig. :ref:`curvature`.
+components in the target function. Fig. :num:`#curvature` is an
+example of a function defined as the sum of three gaussians for which
+the conditions Eq. :eq:`f0const` - :eq:`f4const` are satisfied and the
+local minima of curvature are successfully found, even when blending
+of components is relevant.
 
-.. curvature:
+.. _curvature:
+
 .. figure:: curvature.pdf
     :width: 4in
     :align: center
     :figclass: align-center
+    :alt: alternate text
 
     Example of the points of negative curvature of the function
     :math:`f(x)`. In this case :math:`f(x)` is the sum of three
     independent Gaussian functions (top). The vertical lines in each
-    panel show the conditions imposed in the derivatives to define the
+    panel show the conditions imposed on the derivatives to define the
     points :math:`x^*`.
+
+
 
 Dealing with noise
 ------------------
+
+The numeral problem related to the solution shown in the previous
+section comes from the fact that calculating Eq. :eq:`f2const` -
+:eq:`f4const` is not trivial in the presence of noise.
