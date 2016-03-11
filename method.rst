@@ -75,7 +75,19 @@ These 4 constraints then ensure that the point :math:`x^*` is a local
 minimum of the curvature. Furthermore, even in the presence of both
 blending and noise, these expressions will yield the location of all
 the points that are possible canditates for the positions of Gaussian
-components in the target function.
+components in the target function. Fig. :ref:`curvature`.
+
+.. curvature:
+.. figure:: curvature.pdf
+    :width: 4in
+    :align: center
+    :figclass: align-center
+
+    Example of the points of negative curvature of the function
+    :math:`f(x)`. In this case :math:`f(x)` is the sum of three
+    independent Gaussian functions (top). The vertical lines in each
+    panel show the conditions imposed in the derivatives to define the
+    points :math:`x^*`.
 
 Dealing with noise
 ------------------
