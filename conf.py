@@ -31,7 +31,8 @@ import os
 extensions = [
     'sphinx.ext.pngmath',
     'sphinx.ext.mathjax',
-    'sphinx.ext.autodoc'
+    'sphinx.ext.autodoc',
+    'numfig'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
