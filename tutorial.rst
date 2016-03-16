@@ -39,11 +39,52 @@ have made the following assumptions:
 
 The following code describes an example of how to create spectrum with Gaussian shape and store the channels, amplitude and error arrays in a python pickle file to be read later by GaussPy.
 
-.. literalinclude:: simple_gaussian.py
-    :language: python
-    :lines: 1-34
+.. code-block:: python
+    # Create simple Gaussian profile with added noise
+    # Store in format required for GaussPy
 
-.. plot:: simple_gaussian.py
+    import numpy as np
+    import pickle
+
+    def gaussian(amp, fwhm, mean):
+        return lambda x: amp * np.exp(-(x-mean)**2/2./(fwhm/2.355)**2)
+
+    # Data properties
+    RMS = 0.05
+    NCHANNELS = 512
+    FILENAME = 'simple_gaussian.pickle'
+
+    # Component properties
+    AMP = 1.0
+    FWHM = 20
+    MEAN = 256
+
+    # Initialize
+    gausspy_data = {}
+    chan = np.arange(NCHANNELS)
+    errors = np.ones(NCHANNELS) * RMS
+
+    spectrum = np.random.randn(NCHANNELS) * RMS
+    spectrum += gaussian(AMP, FWHM, MEAN)(chan)
+
+    # Enter results into AGD dataset
+    gausspy_data['data_list'] = gausspy_data.get('data_list', []) + [spectrum]
+    gausspy_data['x_values'] = gausspy_data.get('x_values', []) + [chan]
+    gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
+
+    pickle.dump(gausspy_data, open(FILENAME, 'w'))
+
+In Fig. :num:`#simple-gaussian` we display the simple Gaussian spectrum constructed above.
+
+.. _simple-gaussian:
+
+.. figure:: simple_gaussian.pdf
+    :width: 5in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+    Example spectrum containing a single Gaussian function with added spectral noise.
 
 Running GaussPy
 ----------------------------
@@ -112,12 +153,66 @@ The following is an example python script for plotting the original spectrum and
 
 2. ``DATA_decomposed``: the filename containing the GaussPy decomposition results.
 
-.. literalinclude:: simple_gaussian_plot.py
-    :language: python
+.. code-block:: python
 
-.. plot:: simple_gaussian_plot.py
+    # Plot GaussPy results
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import pickle
 
-Clearly the fit to the simple Gaussian spectrum is good. If we were to vary the value of :math:`\alpha`, the fit would not change significantly as the fit to a spectrum containing a single Gaussian funciton does not depend sensitively on the initial guesses, especially because GaussPy performs a least-squares fit after determining initial guesses for the fitted Gaussian parameters with AGD.
+    def gaussian(amp, fwhm, mean):
+        return lambda x: amp * np.exp(-(x-mean)**2/2./(fwhm/2.355)**2)
+
+    def unravel(list):
+        return np.array([i for array in list for i in array])
+
+    DATA = 'simple_gaussian.pickle'
+    DATA_decomposed = 'simple_gaussian_decomposed.pickle'
+
+    data = pickle.load(open(DATA))
+    spectrum = unravel(data['data_list'])
+    chan = unravel(data['x_values'])
+    errors = unravel(data['errors'])
+
+    decomposed_data = pickle.load(open(DATA_decomposed))
+    means_fit = unravel(decomposed_data['means_fit'])
+    amps_fit = unravel(decomposed_data['amplitudes_fit'])
+    fwhms_fit = unravel(decomposed_data['fwhms_fit'])
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    model = np.zeros(len(chan))
+
+    for j in range(len(means_fit)):
+        component = gaussian(amps_fit[j], fwhms_fit[j], means_fit[j])(chan)
+        model += component
+        ax.plot(chan, component, color='red', lw=1.5)
+
+    ax.plot(chan, spectrum, label='Data', color='black', linewidth=1.5)
+    ax.plot(chan, model, label = r'$\alpha=10.$', color='purple', linewidth=2.)
+    ax.plot(chan, errors, label = 'Errors', color='green', linestyle='dashed', linewidth=2.)
+
+    ax.set_xlabel('Channels')
+    ax.set_ylabel('Amplitude')
+
+    ax.set_xlim(0,len(chan))
+    ax.set_ylim(np.min(spectrum),np.max(spectrum))
+    ax.legend(loc=2)
+
+    plt.show()
+
+.. _simple-gaussian-decomposed:
+
+.. figure:: simple_gaussian_decomposed.pdf
+    :width: 5in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+    Example spectrum containing a single Gaussian function with added spectral noise, decomposed using GaussPy.
+
+Fig. :num:`#simple-gaussian-decomposed` displays the results of the decomposition using the above example python code. Clearly the fit to the simple Gaussian spectrum is good. If we were to vary the value of :math:`\alpha`, the fit would not change significantly as the fit to a spectrum containing a single Gaussian funciton does not depend sensitively on the initial guesses, especially because GaussPy performs a least-squares fit after determining initial guesses for the fitted Gaussian parameters with AGD.
 
 We can now move on from the simple example above to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
 
@@ -144,19 +239,69 @@ We will make the following choices for parameters in this example:
 
 6. ``RMS = 0.05`` : RMS noise per channel
 
-The following code provides an example of how to construct a Gaussian funtion with the above parameters and store it in GaussPy-friendly format.
+7. ``filename`` : name of file to write output data to
 
-.. literalinclude:: multiple_gaussians.py
-    :language: python
-    :lines: 1-41
+The following code provides an example of how to construct a Gaussian function with the above parameters and store it in GaussPy-friendly format.
 
-A plot of the spectrum constructed above is included below.
+.. code-block:: python
 
-.. plot:: multiple_gaussians.py
+    # Create profile with multiple, blended Gaussians and added noise
+    # Store in format required for GaussPy
+
+    import numpy as np
+    import pickle
+
+    def gaussian(amp, fwhm, mean):
+        return lambda x: amp * np.exp(-(x-mean)**2/4./(fwhm/2.355)**2)
+
+    # Specify filename of output data
+    FILENAME = 'multiple_gaussians.pickle'
+
+    # Number of Gaussian functions per spectrum
+    NCOMPS = 3
+
+    # Component properties
+    AMPS = [3,2,1]
+    FWHMS = [10,50,30] # channels
+    MEANS = [210,250,310] # channels
+
+    # Data properties
+    RMS = 0.05
+    NCHANNELS = 512
+
+    # Initialize
+    gausspy_data = {}
+    chan = np.arange(NCHANNELS)
+    errors = np.ones(NCHANNELS) * RMS
+
+    spectrum = np.random.randn(NCHANNELS) * RMS
+
+    # Create spectrum
+    for a, w, m in zip(AMPS, FWHMS, MEANS):
+        spectrum += gaussian(a, w, m)(chan)
+
+    # Enter results into AGD dataset
+    gausspy_data['data_list'] = gausspy_data.get('data_list', []) + [spectrum]
+    gausspy_data['x_values'] = gausspy_data.get('x_values', []) + [chan]
+    gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
+
+    pickle.dump(gausspy_data, open(FILENAME, 'w'))
+
+A plot of the spectrum constructed above is included in Fig. :num:`#multiple-gaussians`.
+
+.. _multiple-gaussians:
+
+.. figure:: multiple_gaussians.pdf
+    :width: 5in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+    Example spectrum containing multiple Gaussian functions with added spectral noise.
 
 Running GaussPy
 ----------------
-With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple example (Chaper 3), we begin by selecting a value :math:`\alpha=` to use in the decomposition. In this case we will select :math:`\alpha=20`. As before, the important parameters to specify are:
+With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple example (Chaper 3), we begin by selecting a value of :math:`\alpha` to use in the decomposition. In this case we will select :math:`\alpha=20` to begin with. As before, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`.
 
@@ -166,16 +311,47 @@ With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple exam
 
 4. ``DATA_out``: filename to store the decomposition results from GaussPy.
 
-.. literalinclude:: multiple_gaussians_plot.py
-    :language: python
-    :lines: 1-25
+.. code-block:: python
+
+    # Decompose multiple Gaussian dataset using AGD
+    import pickle
+    import gausspy.gp as gp
+
+    # Specify necessary parameters
+    alpha1 = 20.
+    snr_thresh = 5.
+    DATA = 'multiple_gaussians.pickle'
+    DATA_out = 'multiple_gaussians_decomposed.pickle'
+
+    # Load GaussPy
+    g = gp.GaussianDecomposer()
+
+    # Setting AGD parameters
+    g.set('phase', 'one')
+    g.set('SNR_thresh', [snr_thresh, snr_thresh])
+    g.set('alpha1', alpha1)
+    g.set('mode','conv')
+
+    # Run GaussPy
+    decomposed_data = g.batch_decomposition(DATA)
+
+    # Save decomposition information
+    pickle.dump(decomposed_data, open(DATA_out, 'w'))
 
 Plot Decomposition Results
 ----------------------------
 
-Following the decomposition by GaussPy, we can explore the effect of the choice of :math:`\alpha` on the decomposition. Below, we have run GaussPy on the multiple-Gaussian dataset constructed above for three values of :math:`\alpha`, including :math:`\alpha=20, \alpha = 2` and :math:`\alpha=10`.
+Following the decomposition by GaussPy, we can explore the effect of the choice of :math:`\alpha` on the decomposition. In Fig. :num:`#multiple-gaussians-decomposed`, we have run GaussPy on the multiple-Gaussian dataset constructed above for three values of :math:`\alpha`, including :math:`\alpha=20, \alpha = 2` and :math:`\alpha=10` and plotted the results.
 
-.. plot:: multiple_gaussians_plot.py
+.. _multiple-gaussians-decomposed:
+
+.. figure:: multiple_gaussians_decomposed.pdf
+    :width: 7in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+    Example spectrum containing multiple Gaussian functions with added spectral noise, decomposed using GaussPy for three values of the smoothing parameter :math:`\alpha`.
 
 These results demonstrate that our choice of :math:`\alpha` has a significant effect on the success of the GaussPy model. In order to select the right value of :math:`\alpha` for a given dataset, we need to train the AGD algorithm using a training set. This process is described in the following section.
 
@@ -213,6 +389,10 @@ In the next example we will show how to implement this in python. We have made t
    ensures that even the wider component can be fit within the
    spectrum.
 
+6. ``TRAINING_SET`` : True or False, determines whether the decomposition "true answers" are sotred along with the synthetic spectra for accuracy verification in training.
+
+7. ``FILENAME`` : filename for storing the synthetically-constructed data
+
 .. code-block:: python
 
     # Create training dataset with Gaussian profiles
@@ -232,31 +412,27 @@ In the next example we will show how to implement this in python. We have made t
     NCOMPS = 4
 
     # Specify the min-max range of possible properties of the Gaussian function paramters:
-    # Amplitude (AMP)
     AMP_lims = [RMS * 5, RMS * 25]
-    # Full width at half maximum in channels (FWHM)
     FWHM_lims = [10, 35] # channels
-    # Mean channel position (MEAN)
     MEAN_lims = [0.25 * NCHANNELS, 0.75 * NCHANNELS]
 
-    # Indicate whetehre the data created here will be used as a training set
+    # Indicate whether the data created here will be used as a training set
     # (a.k.a. decide to store the "true" answers or not at the end)
     TRAINING_SET = True
 
     # Specify the pickle file to store the results in
-    FILENAME = 'agd_data_science.pickle'
+    FILENAME = 'training_data.pickle'
 
 With the above parameters specified, we can proceed with constructing a set of synthetic training data composed of Gaussian functions with known parameters (i.e., for which we know the "true" decompositon),sampled randomly from the parameter ranges specified above. The resulting data, including the channel values, spectral values and error estimates, are stored in the pickle file specified above. If we want this to be a training set (``TRAINING_SET = True``), the "true" decomposition answers for estimating the accuracy of a decomposition are also stored in the output file. For example, to construct a synthetic dataset:
 
 .. code-block:: python
 
-    # GaussPy Example 1
-    # Create spectra with Gaussian profiles -cont-
+    # Create training dataset with Gaussian profiles -cont-
 
     # Initialize
     agd_data = {}
     chan = np.arange(NCHANNELS)
-    errors = chan * 0. + RMS # Constant noise for all spectra
+    errors = np.ones(NCHANNELS) * RMS
 
     # Begin populating data
     for i in range(NSPECTRA):
@@ -295,16 +471,20 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy will not fit components.
 
-3. ``alpha1``: initial guess for :math:`\alpha`
+3. ``alpha1``: initial choice for :math:`\alpha`
 
 .. code-block:: python
+
+    # Find the optimal value of alpha by running GaussPy on
+    # a "training dataset" for iteratively different alpha values
+    # and comparing the results with the "true" answers
 
     import gausspy.gp as gp
 
     # Set necessary parameters
-    FILENAME = 'agd_data.pickle'
+    FILENAME = 'training_data.pickle'
     snr_thresh = 5.
-    alpha1
+    alpha1 = 10.
 
     g = gp.GaussianDecomposer()
 
@@ -322,13 +502,6 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 GausspPy will iterate over a range of :math:`\alpha` values and compare the decomposition associated with each :math:`\alpha` value to the correct decomposition specified within the training dataset to maximize the accuracy of the decomposition.
 
-Once the training is completed, we can view the "trained" value of alpha by looking at the attribute of our GaussianDecomposer instance.
-
-.. code-block:: python
-
-    # get the parameters attribute of g, which is a dictionary of important
-    # variables
-    print(g.p['alpha1'])
 
 Running AGD using Trained :math:`\alpha`
 ========================================
