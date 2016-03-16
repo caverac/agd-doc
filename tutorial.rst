@@ -122,7 +122,7 @@ Clearly the fit to the simple Gaussian spectrum is good. If we were to vary the 
 We can now move on from the simple example above to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
 
 =============================
-Multiple Gaussians Example
+Multiple Gaussians Tutorial
 =============================
 
 
@@ -181,7 +181,7 @@ These results demonstrate that our choice of :math:`\alpha` has a significant ef
 
 
 =============================
-Training AGD to select :math:`\alpha`
+Training AGD to select Alpha
 =============================
 
 Creating a Synthetic Training Dataset
