@@ -1,4 +1,4 @@
-.. _tutorial:
+.. _simple-example-tutorial:
 
 =======================================
 Simple Example Tutorial
@@ -216,6 +216,9 @@ Fig. :num:`#simple-gaussian-decomposed` displays the results of the decompositio
 
 We can now move on from the simple example above to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
 
+
+.. _multiple-gaussians-tutorial:
+
 =============================
 Multiple Gaussians Tutorial
 =============================
@@ -223,7 +226,7 @@ Multiple Gaussians Tutorial
 
 Constructing a GaussPy-Friendly Dataset
 --------------------------------------
-As discussed in the Simple Example section above, before running GaussPy we must ensure that our data is in a format readable by GaussPy. In particular, for each spectrum, we need to provide the independent and dependent spectral arrays (i.e. channels and amplitudes) and an estimate of the uncertainity per channel. In the following example we will construct a spectrum containing multiple overlapping Gaussian components with added spectral noise, using Equation :eq:`spectra`, and plot the results.
+As discussed in the :ref:`simple-example-tutorial`, before running GaussPy we must ensure that our data is in a format readable by GaussPy. In particular, for each spectrum, we need to provide the independent and dependent spectral arrays (i.e. channels and amplitudes) and an estimate of the uncertainity per channel. In the following example we will construct a spectrum containing multiple overlapping Gaussian components with added spectral noise, using Equation :eq:`spectra`, and plot the results.
 
 We will make the following choices for parameters in this example:
 
@@ -301,7 +304,7 @@ A plot of the spectrum constructed above is included in Fig. :num:`#multiple-gau
 
 Running GaussPy
 ----------------
-With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple example (Chaper 3), we begin by selecting a value of :math:`\alpha` to use in the decomposition. In this case we will select :math:`\alpha=20` to begin with. As before, the important parameters to specify are:
+With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simple-example-tutorial`, we begin by selecting a value of :math:`\alpha` to use in the decomposition. In this case we will select :math:`\alpha=20` to begin with. As before, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`.
 
@@ -355,10 +358,11 @@ Following the decomposition by GaussPy, we can explore the effect of the choice 
 
 These results demonstrate that our choice of :math:`\alpha` has a significant effect on the success of the GaussPy model. In order to select the right value of :math:`\alpha` for a given dataset, we need to train the AGD algorithm using a training set. This process is described in the following section.
 
+.. _training-example:
 
-=============================
-Training AGD to select Alpha
-=============================
+======================================
+Training AGD to select :math:`\alpha`
+======================================
 
 Creating a Synthetic Training Dataset
 ----------------------------
@@ -367,7 +371,7 @@ To select the optimal value of the smoothing parameter :math:`\alpha`, you must 
 
 Training datasets can be constructed by adding Gaussian functions with parameters drawn from known distributions with known uncertainties. For example, we can create a mock dataset with ``NSPECTRA``-realizations of Equation :eq:`spectra`.
 
-In the next example we will show how to implement this in python. We have made the following assumptions
+In the next example we will show how to implement this in python. For this example we will construct a synthetic training dataset with parameters similar to those found in the :ref:`multiple-gaussians-tutorial` example. We must set the following parameters:
 
 1. :math:`\mathrm{NOISE} \sim N(0, {\rm RMS}) + f \times {\rm RMS}`
    with ``RMS=0.05`` and :math:`f=0`
@@ -389,7 +393,7 @@ In the next example we will show how to implement this in python. We have made t
    ensures that even the wider component can be fit within the
    spectrum.
 
-6. ``TRAINING_SET`` : True or False, determines whether the decomposition "true answers" are sotred along with the synthetic spectra for accuracy verification in training.
+6. ``TRAINING_SET`` : True, determines whether the decomposition "true answers" are sotred along with the synthetic spectra for accuracy verification in training.
 
 7. ``FILENAME`` : filename for storing the synthetically-constructed data
 
@@ -516,15 +520,10 @@ The above training dataset parameters were selected with the "Multiple Gaussians
 To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_i=2`, AGD converges to a value of :math:`\alpha=6.84` with an accuracy of 73.4% and required 97 iterations. For :math:`\alpha_i=7`, the training converges to :math:`\alpha=6.8` with an accuracy of 73.1% following 56 iterations. (results will vary very slightly for each test of the above code, given the random selection of component parameters in the training dataset).
 
 
-Running AGD using Trained :math:`\alpha`
-========================================
+Running GaussPy using Trained :math:`\alpha`
+-------------------------------------------
 
-With the trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. In this example, we will return to the "Multiple Gaussians" example from Chapter 4. Following training, we select a value of :math:`\alpha=6.8`, which decomposed our training dataset with an accuracy of ~73%.
-
-
-Running GaussPy
-----------------
-With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple example (Chaper 3), we begin by selecting a value of :math:`\alpha` to use in the decomposition. In this case we will select :math:`\alpha=20` to begin with. As before, the important parameters to specify are:
+With the trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. In this example, we will return to the example from the :ref:`multiple-gaussians-tutorial` chapter. Following training, we select a value of :math:`\alpha=6.8`, which decomposed our training dataset with an accuracy of ~73%. As in the :ref:`simple-example-tutorial` and :ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`.
 
@@ -541,7 +540,7 @@ With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple exam
     import gausspy.gp as gp
 
     # Specify necessary parameters
-    alpha1 = 6.84
+    alpha1 = 6.8
     snr_thresh = 5.
 
     DATA = 'multiple_gaussians.pickle'
@@ -573,13 +572,16 @@ Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fittin
     :figclass: align-center
     :alt: alternate text
 
+.. _two-phase-decomposition:
 
 =============================
 Two-Phase Decompositon
 =============================
 
+In the :ref:`training-example` chapter, we learned how to "train" AGD to select the optimal value of the smoothing parameter :math:`\alpha` using a training dataset with known underlying decomposition. This trained value is essentially tuned to find a particular type of Gaussian shape within the data. However, when more than one family or phase of Gaussian shapes is contained within a spectrum, one value of :math:`\alpha` is not enough to recover all important spectral information. For example, in radio astronomical obserations of absorption by neutral hydrogen at 21 cm, we find narrow and strong lines in addition to wide, shallow lines indicative of two different populations of material, namely the cold and warm neutral media.
 
+For GaussPy to be sensitive to two types of Gaussian functions contained within a dataset, we must use the "two-phase" version of AGD. The two-phase decomposition makes use of two values of the smoothing parameter :math:`\alpha`, one for each "phase" contained within the dataset.
 
-
-
+Training for Two Phases: :math:`\alpha_1` and :math:`\alpha_2`
+------------------------------------------------------------------------
 
