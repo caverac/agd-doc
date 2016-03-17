@@ -48,7 +48,8 @@ on. Install these required packages with:
 
 .. code-block:: bash
 
-    sudo apt-get install libblas-dev liblapack-dev gfortran libgsl0-dev libhdf5-serial-dev hdf5-tools
+    sudo apt-get install libblas-dev liblapack-dev gfortran libgsl0-dev libhdf5-serial-dev 
+    sudo apt-get install hdf5-tools
 
 Install pip for easy installation of python packages:
 
