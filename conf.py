@@ -187,7 +187,7 @@ htmlhelp_basename = 'GaussPydoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-  'classoptions': ',openany,oneside',     
+  'classoptions': ',openany,oneside',
 'babel' : '\\usepackage[english]{babel}'
 # The paper size ('letterpaper' or 'a4paper').
 #'papersize': 'letterpaper',
@@ -204,7 +204,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'GaussPy.tex', u'GaussPy Documentation',
-   u'Robert Lindner, Carlos Vera-Ciro', 'manual'),
+   u'Robert Lindner, Carlos Vera-Ciro, Claire Murray, Elijah Bernstein-Cooper', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

@@ -1,4 +1,4 @@
-.. _tutorial:
+.. _simple-example-tutorial:
 
 =======================================
 Simple Example Tutorial
@@ -216,6 +216,9 @@ Fig. :num:`#simple-gaussian-decomposed` displays the results of the decompositio
 
 We can now move on from the simple example above to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
 
+
+.. _multiple-gaussians-tutorial:
+
 =============================
 Multiple Gaussians Tutorial
 =============================
@@ -223,7 +226,7 @@ Multiple Gaussians Tutorial
 
 Constructing a GaussPy-Friendly Dataset
 --------------------------------------
-As discussed in the Simple Example section above, before running GaussPy we must ensure that our data is in a format readable by GaussPy. In particular, for each spectrum, we need to provide the independent and dependent spectral arrays (i.e. channels and amplitudes) and an estimate of the uncertainity per channel. In the following example we will construct a spectrum containing multiple overlapping Gaussian components with added spectral noise, using Equation :eq:`spectra`, and plot the results.
+As discussed in the :ref:`simple-example-tutorial`, before running GaussPy we must ensure that our data is in a format readable by GaussPy. In particular, for each spectrum, we need to provide the independent and dependent spectral arrays (i.e. channels and amplitudes) and an estimate of the uncertainity per channel. In the following example we will construct a spectrum containing multiple overlapping Gaussian components with added spectral noise, using Equation :eq:`spectra`, and plot the results.
 
 We will make the following choices for parameters in this example:
 
@@ -262,7 +265,7 @@ The following code provides an example of how to construct a Gaussian function w
 
     # Component properties
     AMPS = [3,2,1]
-    FWHMS = [10,50,30] # channels
+    FWHMS = [15,50,30] # channels
     MEANS = [210,250,310] # channels
 
     # Data properties
@@ -301,7 +304,7 @@ A plot of the spectrum constructed above is included in Fig. :num:`#multiple-gau
 
 Running GaussPy
 ----------------
-With our GaussPy-friendly dataset, we can now run GaussPy. As in the simple example (Chaper 3), we begin by selecting a value of :math:`\alpha` to use in the decomposition. In this case we will select :math:`\alpha=20` to begin with. As before, the important parameters to specify are:
+With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simple-example-tutorial`, we begin by selecting a value of :math:`\alpha` to use in the decomposition. In this case we will select :math:`\alpha=20` to begin with. As before, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`.
 
@@ -355,10 +358,17 @@ Following the decomposition by GaussPy, we can explore the effect of the choice 
 
 These results demonstrate that our choice of :math:`\alpha` has a significant effect on the success of the GaussPy model. In order to select the right value of :math:`\alpha` for a given dataset, we need to train the AGD algorithm using a training set. This process is described in the following section.
 
+.. _training-example:
 
+<<<<<<< HEAD
 =============================
 Training AGD to select Alpha
 =============================
+=======
+======================================
+Training AGD to select :math:`\alpha`
+======================================
+>>>>>>> e9b9f3ecc1505f858a999f72e6a46e85f56fe223
 
 Creating a Synthetic Training Dataset
 ----------------------------
@@ -367,29 +377,29 @@ To select the optimal value of the smoothing parameter :math:`\alpha`, you must 
 
 Training datasets can be constructed by adding Gaussian functions with parameters drawn from known distributions with known uncertainties. For example, we can create a mock dataset with ``NSPECTRA``-realizations of Equation :eq:`spectra`.
 
-In the next example we will show how to implement this in python. We have made the following assumptions
+In the next example we will show how to implement this in python. For this example we will construct a synthetic training dataset with parameters similar to those found in the :ref:`multiple-gaussians-tutorial` example. We must set the following parameters:
 
 1. :math:`\mathrm{NOISE} \sim N(0, {\rm RMS}) + f \times {\rm RMS}`
    with ``RMS=0.05`` and :math:`f=0`
 
-2. ``NCOMPS = 4``
+2. ``NCOMPS = 3``
 
 3. ``NCHANNELS = 512`` This number sets the resolution of each
    spectrum. **Does this number need to be the same for all spectra in
    AGD?**
 
-4. :math:`\mathrm{AMP} \sim \mu(5 \mathrm{RMS}, 25 \mathrm{RMS})`,
+4. :math:`\mathrm{AMP} \sim \mu(0.5, 4)`,
    this way we ensure that every spectral feature is above the noise
    level. Spectra with a more dominant contribution from the noise can
    also be generated and used as training sets for AGD
 
-5. :math:`\mathrm{FWHM} \sim \mu(10, 35)` and :math:`\mathrm{MEAN}
+5. :math:`\mathrm{FWHM} \sim \mu(10, 80)` and :math:`\mathrm{MEAN}
    \sim \mu(0.25, 0.75) \times \mathrm{NCHANNELS}`, note that for our
    choice of the number of channels, this selection of ``FWHM``
    ensures that even the wider component can be fit within the
    spectrum.
 
-6. ``TRAINING_SET`` : True or False, determines whether the decomposition "true answers" are sotred along with the synthetic spectra for accuracy verification in training.
+6. ``TRAINING_SET`` : True, determines whether the decomposition "true answers" are sotred along with the synthetic spectra for accuracy verification in training.
 
 7. ``FILENAME`` : filename for storing the synthetically-constructed data
 
@@ -402,19 +412,20 @@ In the next example we will show how to implement this in python. We have made t
 
     # Specify the number of spectral channels (NCHANNELS)
     NCHANNELS = 512
+
     # Specify the number of spectra (NSPECTRA)
     NSPECTRA = 200
 
     # Estimate of the root-mean-square uncertainty per channel (RMS)
     RMS = 0.05
 
-    # Estimate the mean number of Gaussian functions to add per spectrum (NCOMPS)
-    NCOMPS = 4
+    # Estimate the number of components
+    NCOMPS = 3
 
     # Specify the min-max range of possible properties of the Gaussian function paramters:
-    AMP_lims = [RMS * 5, RMS * 25]
-    FWHM_lims = [10, 35] # channels
-    MEAN_lims = [0.25 * NCHANNELS, 0.75 * NCHANNELS]
+    AMP_lims = [0.5, 4]
+    FWHM_lims = [10, 80] # channels
+    MEAN_lims = [0.25*NCHANNELS, 0.75*NCHANNELS] # channels
 
     # Indicate whether the data created here will be used as a training set
     # (a.k.a. decide to store the "true" answers or not at the end)
@@ -423,14 +434,14 @@ In the next example we will show how to implement this in python. We have made t
     # Specify the pickle file to store the results in
     FILENAME = 'training_data.pickle'
 
-With the above parameters specified, we can proceed with constructing a set of synthetic training data composed of Gaussian functions with known parameters (i.e., for which we know the "true" decompositon),sampled randomly from the parameter ranges specified above. The resulting data, including the channel values, spectral values and error estimates, are stored in the pickle file specified above. If we want this to be a training set (``TRAINING_SET = True``), the "true" decomposition answers for estimating the accuracy of a decomposition are also stored in the output file. For example, to construct a synthetic dataset:
+With the above parameters specified, we can proceed with constructing a set of synthetic training data composed of Gaussian functions with known parameters (i.e., for which we know the "true" decompositon), sampled randomly from the parameter ranges specified above. The resulting data, including the channel values, spectral values and error estimates, are stored in the pickle file specified above with ``FILENAME``. Because we want this to be a training set (``TRAINING_SET = True``), the true decomposition answers (in the form of amplitudes, FWHM and means for all components) are also stored in the output file. For example, to construct a synthetic dataset:
 
 .. code-block:: python
 
     # Create training dataset with Gaussian profiles -cont-
 
     # Initialize
-    agd_data = {}
+    gausspy_data = {}
     chan = np.arange(NCHANNELS)
     errors = np.ones(NCHANNELS) * RMS
 
@@ -438,28 +449,37 @@ With the above parameters specified, we can proceed with constructing a set of s
     for i in range(NSPECTRA):
         spectrum_i = np.random.randn(NCHANNELS) * RMS
 
-        # Sample random components:
-        amps = np.random.rand(NCOMPS) * (AMP_lims[1] - AMP_lims[0]) + AMP_lims[0]
-        fwhms = np.random.rand(NCOMPS) * (FWHM_lims[1] - FWHM_lims[0]) + FWHM_lims[0]
-        means = np.random.rand(NCOMPS) * (MEAN_lims[1] - MEAN_lims[0]) + MEAN_lims[0]
+        amps = []
+        fwhms = []
+        means = []
 
-        # Create spectrum
-        for a, w, m in zip(amps, fwhms, means):
+        for comp in range(ncomps):
+            # Select random values for components within specified ranges
+            a = np.random.uniform(AMP_lims[0], AMP_lims[1])
+            w = np.random.uniform(FWHM_lims[0], FWHM_lims[1])
+            m = np.random.uniform(MEAN_lims[0], MEAN_lims[1])
+
+            # Add Gaussian profile with the above random parameters to the spectrum
             spectrum_i += gaussian(a, w, m)(chan)
 
+            # Append the parameters to initialized lists for storing
+            amps.append(a)
+            fwhms.append(w)
+            means.append(m)
+
         # Enter results into AGD dataset
-        agd_data['data_list'] = agd_data.get('data_list', []) + [spectrum_i]
-        agd_data['x_values'] = agd_data.get('x_values', []) + [chan]
-        agd_data['errors'] = agd_data.get('errors', []) + [errors]
+        gausspy_data['data_list'] = gausspy_data.get('data_list', []) + [spectrum_i]
+        gausspy_data['x_values'] = gausspy_data.get('x_values', []) + [chan]
+        gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
 
         # If training data, keep answers
         if TRAINING_SET:
-            agd_data['amplitudes'] = agd_data.get('amplitudes', []) + [amps]
-            agd_data['fwhms'] = agd_data.get('fwhms', []) + [fwhms]
-            agd_data['means'] = agd_data.get('means', []) + [means]
+            gausspy_data['amplitudes'] = gausspy_data.get('amplitudes', []) + [amps]
+            gausspy_data['fwhms'] = gausspy_data.get('fwhms', []) + [fwhms]
+            gausspy_data['means'] = gausspy_data.get('means', []) + [means]
 
     # Dump synthetic data into specified filename
-    pickle.dump(agd_data, open(FILENAME, 'w'))
+    pickle.dump(gausspy_data, open(FILENAME, 'w'))
 
 
 Training the Algorithm
@@ -471,20 +491,18 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy will not fit components.
 
-3. ``alpha1``: initial choice for :math:`\alpha`
+3. ``alpha_i``: initial choice for :math:`\alpha`
 
 .. code-block:: python
 
-    # Find the optimal value of alpha by running GaussPy on
-    # a "training dataset" for iteratively different alpha values
-    # and comparing the results with the "true" answers
+    # Select the optimal value of alpha by training the AGD algorithm
 
     import gausspy.gp as gp
 
     # Set necessary parameters
     FILENAME = 'training_data.pickle'
     snr_thresh = 5.
-    alpha1 = 10.
+    alpha_i = 20.
 
     g = gp.GaussianDecomposer()
 
@@ -493,20 +511,89 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
     # Set GaussPy parameters
     g.set('phase', 'one')
-    g.set('SNR_thresh', snr_thresh)
+    g.set('SNR_thresh', [snr_thresh, snr_thresh])
+    g.set('mode','conv')
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha1, plot=False,
+    g.train(alpha1_initial = alpha_i, plot=False,
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
-GausspPy will iterate over a range of :math:`\alpha` values and compare the decomposition associated with each :math:`\alpha` value to the correct decomposition specified within the training dataset to maximize the accuracy of the decomposition.
+GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_i` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_i` and recompute the decomposition until the process converges. Convergence is achieved when the reduced :math:`\chi^2` is less than 0.03 for at least 10 iterations. The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
+
+The above training dataset parameters were selected with the "Multiple Gaussians" example in mind. As we saw in Chapter 4, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training example above, when we choose an initial value of :math:`\alpha_i=20` the training process converges to :math:`\alpha=6.8` with an accuracy of 73.1%, and required 355 iterations.
+
+To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_i=2`, AGD converges to a value of :math:`\alpha=6.84` with an accuracy of 73.4% and required 97 iterations. For :math:`\alpha_i=7`, the training converges to :math:`\alpha=6.8` with an accuracy of 73.1% following 56 iterations. (results will vary very slightly for each test of the above code, given the random selection of component parameters in the training dataset).
 
 
-Running AGD using Trained :math:`\alpha`
+Running GaussPy using Trained :math:`\alpha`
+-------------------------------------------
+
+With the trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. In this example, we will return to the example from the :ref:`multiple-gaussians-tutorial` chapter. Following training, we select a value of :math:`\alpha=6.8`, which decomposed our training dataset with an accuracy of ~73%. As in the :ref:`simple-example-tutorial` and :ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
+
+1. ``alpha1``: our choice for the value of :math:`\alpha`.
+
+2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
+
+3. ``DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
+
+4. ``DATA_out``: filename to store the decomposition results from GaussPy.
+
+.. code-block:: python
+
+    # Decompose multiple Gaussian dataset using AGD with TRAINED alpha
+    import pickle
+    import gausspy.gp as gp
+
+    # Specify necessary parameters
+    alpha1 = 6.8
+    snr_thresh = 5.
+
+    DATA = 'multiple_gaussians.pickle'
+    DATA_out = 'multiple_gaussians_trained_decomposed.pickle'
+
+    # Load GaussPy
+    g = gp.GaussianDecomposer()
+
+    # Setting AGD parameters
+    g.set('phase', 'one')
+    g.set('SNR_thresh', [snr_thresh, snr_thresh])
+    g.set('alpha1', alpha1)
+    g.set('mode','conv')
+
+    # Run GaussPy
+    decomposed_data = g.batch_decomposition(DATA)
+
+<<<<<<< HEAD
 ========================================
+Running AGD using Trained Alpha
+========================================
+=======
+    # Save decomposition information
+    pickle.dump(decomposed_data, open(DATA_out, 'w'))
 
-With the trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. 
 
+Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fitting the "Multiple Gaussians" spectrum with a trained value of :math:`\alpha=6.8`.
 
+.. _multiple-gaussians-trained-decomposed:
+
+.. figure:: multiple_gaussians_trained_decomposed.pdf
+    :width: 7in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+.. _two-phase-decomposition:
+
+=============================
+Two-Phase Decompositon
+=============================
+>>>>>>> e9b9f3ecc1505f858a999f72e6a46e85f56fe223
+
+In the :ref:`training-example` chapter, we learned how to "train" AGD to select the optimal value of the smoothing parameter :math:`\alpha` using a training dataset with known underlying decomposition. This trained value is essentially tuned to find a particular type of Gaussian shape within the data. However, when more than one family or phase of Gaussian shapes is contained within a spectrum, one value of :math:`\alpha` is not enough to recover all important spectral information. For example, in radio astronomical obserations of absorption by neutral hydrogen at 21 cm, we find narrow and strong lines in addition to wide, shallow lines indicative of two different populations of material, namely the cold and warm neutral media.
+
+For GaussPy to be sensitive to two types of Gaussian functions contained within a dataset, we must use the "two-phase" version of AGD. The two-phase decomposition makes use of two values of the smoothing parameter :math:`\alpha`, one for each "phase" contained within the dataset.
+
+Training for Two Phases: :math:`\alpha_1` and :math:`\alpha_2`
+------------------------------------------------------------------------
 
