@@ -47,7 +47,7 @@ The following code describes an example of how to create spectrum with Gaussian 
     import pickle
 
     def gaussian(amp, fwhm, mean):
-        return lambda x: amp * np.exp(-(x-mean)**2/2./(fwhm/2.355)**2)
+        return lambda x: amp * np.exp(-4. * np.log(2) * (x-mean)**2 / fwhm**2)
 
     # Data properties
     RMS = 0.05
@@ -78,7 +78,7 @@ In Fig. :num:`#simple-gaussian` we display the simple Gaussian spectrum construc
 
 .. _simple-gaussian:
 
-.. figure:: simple_gaussian.pdf
+.. figure:: simple_gaussian.png
     :width: 5in
     :align: center
     :figclass: align-center
@@ -161,7 +161,7 @@ The following is an example python script for plotting the original spectrum and
     import pickle
 
     def gaussian(amp, fwhm, mean):
-        return lambda x: amp * np.exp(-(x-mean)**2/2./(fwhm/2.355)**2)
+        return lambda x: amp * np.exp(-4. * np.log(2) * (x-mean)**2 / fwhm**2)
 
     def unravel(list):
         return np.array([i for array in list for i in array])
@@ -204,7 +204,7 @@ The following is an example python script for plotting the original spectrum and
 
 .. _simple-gaussian-decomposed:
 
-.. figure:: simple_gaussian_decomposed.pdf
+.. figure:: simple_gaussian_decomposed.png
     :width: 5in
     :align: center
     :figclass: align-center
@@ -255,7 +255,7 @@ The following code provides an example of how to construct a Gaussian function w
     import pickle
 
     def gaussian(amp, fwhm, mean):
-        return lambda x: amp * np.exp(-(x-mean)**2/4./(fwhm/2.355)**2)
+        return lambda x: amp * np.exp(-4. * np.log(2) * (x-mean)**2 / fwhm**2)
 
     # Specify filename of output data
     FILENAME = 'multiple_gaussians.pickle'
@@ -265,8 +265,8 @@ The following code provides an example of how to construct a Gaussian function w
 
     # Component properties
     AMPS = [3,2,1]
-    FWHMS = [15,50,30] # channels
-    MEANS = [210,250,310] # channels
+    FWHMS = [20,50,40] # channels
+    MEANS = [220,250,300] # channels
 
     # Data properties
     RMS = 0.05
@@ -294,7 +294,7 @@ A plot of the spectrum constructed above is included in Fig. :num:`#multiple-gau
 
 .. _multiple-gaussians:
 
-.. figure:: multiple_gaussians.pdf
+.. figure:: multiple_gaussians.png
     :width: 5in
     :align: center
     :figclass: align-center
@@ -344,11 +344,11 @@ With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simpl
 Plot Decomposition Results
 ----------------------------
 
-Following the decomposition by GaussPy, we can explore the effect of the choice of :math:`\alpha` on the decomposition. In Fig. :num:`#multiple-gaussians-decomposed`, we have run GaussPy on the multiple-Gaussian dataset constructed above for three values of :math:`\alpha`, including :math:`\alpha=20, \alpha = 2` and :math:`\alpha=10` and plotted the results.
+Following the decomposition by GaussPy, we can explore the effect of the choice of :math:`\alpha` on the decomposition. In Fig. :num:`#multiple-gaussians-decomposed`, we have run GaussPy on the multiple-Gaussian dataset constructed above for three values of :math:`\alpha`, including :math:`\alpha=20, \alpha = 4` and :math:`\alpha=10` and plotted the results.
 
 .. _multiple-gaussians-decomposed:
 
-.. figure:: multiple_gaussians_decomposed.pdf
+.. figure:: multiple_gaussians_decomposed.png
     :width: 7in
     :align: center
     :figclass: align-center
@@ -360,15 +360,9 @@ These results demonstrate that our choice of :math:`\alpha` has a significant ef
 
 .. _training-example:
 
-<<<<<<< HEAD
-=============================
-Training AGD to select Alpha
-=============================
-=======
 ======================================
 Training AGD to select :math:`\alpha`
 ======================================
->>>>>>> e9b9f3ecc1505f858a999f72e6a46e85f56fe223
 
 Creating a Synthetic Training Dataset
 ----------------------------
@@ -393,7 +387,7 @@ In the next example we will show how to implement this in python. For this examp
    level. Spectra with a more dominant contribution from the noise can
    also be generated and used as training sets for AGD
 
-5. :math:`\mathrm{FWHM} \sim \mu(10, 80)` and :math:`\mathrm{MEAN}
+5. :math:`\mathrm{FWHM} \sim \mu(20, 80)` and :math:`\mathrm{MEAN}
    \sim \mu(0.25, 0.75) \times \mathrm{NCHANNELS}`, note that for our
    choice of the number of channels, this selection of ``FWHM``
    ensures that even the wider component can be fit within the
@@ -424,7 +418,7 @@ In the next example we will show how to implement this in python. For this examp
 
     # Specify the min-max range of possible properties of the Gaussian function paramters:
     AMP_lims = [0.5, 4]
-    FWHM_lims = [10, 80] # channels
+    FWHM_lims = [20, 80] # channels
     MEAN_lims = [0.25*NCHANNELS, 0.75*NCHANNELS] # channels
 
     # Indicate whether the data created here will be used as a training set
@@ -521,15 +515,15 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_i` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_i` and recompute the decomposition until the process converges. Convergence is achieved when the reduced :math:`\chi^2` is less than 0.03 for at least 10 iterations. The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
 
-The above training dataset parameters were selected with the "Multiple Gaussians" example in mind. As we saw in Chapter 4, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training example above, when we choose an initial value of :math:`\alpha_i=20` the training process converges to :math:`\alpha=6.8` with an accuracy of 73.1%, and required 355 iterations.
+The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of :math:`\alpha_i=20` the training process converges to :math:`\alpha=9.01` with an accuracy of 70.6%, and required 371 iterations.
 
-To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_i=2`, AGD converges to a value of :math:`\alpha=6.84` with an accuracy of 73.4% and required 97 iterations. For :math:`\alpha_i=7`, the training converges to :math:`\alpha=6.8` with an accuracy of 73.1% following 56 iterations. (results will vary very slightly for each test of the above code, given the random selection of component parameters in the training dataset).
+To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_i=4`, AGD converges to a value of :math:`\alpha=8.67` with an accuracy of 70.7% and required 185 iterations. For :math:`\alpha_i=10`, the training converges to :math:`\alpha=9.01` with an accuracy of 70.6% following 132 iterations. These results indicate that the training will converge on a range of :math:`\alpha` values that decompose the target spectrum with similar accuracy. Repeating the training with a value of :math:`\alpha_i` between 8.67 and 9.01 will converge to :math:`\alpha=\alpha_i` within ~30 iterations. (results will vary very slightly for each test of the above code, given the random selection of component parameters in the training dataset).
 
 
 Running GaussPy using Trained :math:`\alpha`
 -------------------------------------------
 
-With the trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. In this example, we will return to the example from the :ref:`multiple-gaussians-tutorial` chapter. Following training, we select a value of :math:`\alpha=6.8`, which decomposed our training dataset with an accuracy of ~73%. As in the :ref:`simple-example-tutorial` and :ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
+With a trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. In this example, we will return to the example from the :ref:`multiple-gaussians-tutorial` chapter. Following training, we select a value of :math:`\alpha=9.01`, which decomposed our training dataset with an accuracy of ~70%. As in the :ref:`simple-example-tutorial` and :ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`.
 
@@ -546,7 +540,7 @@ With the trained value of :math:`\alpha` in hand, we can proceed to decompose ou
     import gausspy.gp as gp
 
     # Specify necessary parameters
-    alpha1 = 6.8
+    alpha1 = 9.01
     snr_thresh = 5.
 
     DATA = 'multiple_gaussians.pickle'
@@ -564,20 +558,15 @@ With the trained value of :math:`\alpha` in hand, we can proceed to decompose ou
     # Run GaussPy
     decomposed_data = g.batch_decomposition(DATA)
 
-<<<<<<< HEAD
-========================================
-Running AGD using Trained Alpha
-========================================
-=======
     # Save decomposition information
     pickle.dump(decomposed_data, open(DATA_out, 'w'))
 
 
-Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fitting the "Multiple Gaussians" spectrum with a trained value of :math:`\alpha=6.8`.
+Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fitting the "Multiple Gaussians" spectrum with a trained value of :math:`\alpha=9.01`.
 
 .. _multiple-gaussians-trained-decomposed:
 
-.. figure:: multiple_gaussians_trained_decomposed.pdf
+.. figure:: multiple_gaussians_trained_decomposed.png
     :width: 7in
     :align: center
     :figclass: align-center
@@ -588,12 +577,13 @@ Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fittin
 =============================
 Two-Phase Decompositon
 =============================
->>>>>>> e9b9f3ecc1505f858a999f72e6a46e85f56fe223
 
-In the :ref:`training-example` chapter, we learned how to "train" AGD to select the optimal value of the smoothing parameter :math:`\alpha` using a training dataset with known underlying decomposition. This trained value is essentially tuned to find a particular type of Gaussian shape within the data. However, when more than one family or phase of Gaussian shapes is contained within a spectrum, one value of :math:`\alpha` is not enough to recover all important spectral information. For example, in radio astronomical obserations of absorption by neutral hydrogen at 21 cm, we find narrow and strong lines in addition to wide, shallow lines indicative of two different populations of material, namely the cold and warm neutral media.
+In the :ref:`training-example` chapter, we learned how to "train" AGD to select the optimal value of the smoothing parameter :math:`\alpha` using a training dataset with known underlying decomposition. This trained value is essentially tuned to find a particular type of Gaussian shape within the data. However, when more than one family or phase of Gaussian shapes is contained within a spectrum, one value of :math:`\alpha` is not enough to recover all important spectral information. For example, in radio astronomical observations of absorption by neutral hydrogen at 21 cm, we find narrow and strong lines in addition to wide, shallow lines indicative of two different populations of material, namely the cold and warm neutral media.
 
 For GaussPy to be sensitive to two types of Gaussian functions contained within a dataset, we must use the "two-phase" version of AGD. The two-phase decomposition makes use of two values of the smoothing parameter :math:`\alpha`, one for each "phase" contained within the dataset.
 
 Training for Two Phases: :math:`\alpha_1` and :math:`\alpha_2`
-------------------------------------------------------------------------
+----------------------------------------------------------------
+
+
 
