@@ -80,7 +80,7 @@ of components is relevant.
 
 .. _curvature:
 
-.. figure:: curvature.pdf
+.. figure:: curvature.png
     :width: 4in
     :align: center
     :figclass: align-center
@@ -109,7 +109,7 @@ within the noise!
 
 .. _deriv:
 
-.. figure:: deriv.pdf
+.. figure:: deriv.png
     :width: 4in
     :align: center
     :figclass: align-center
