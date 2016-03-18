@@ -43,7 +43,7 @@ In an ideal situation where the contribution from noise vanishes we
 can take :math:`\epsilon_0=0`. However, when random fluctuations are
 added to the target function, this condition needs to be modified
 accordingly. A good selection of :math:`\epsilon_0` thus needs to be
-in proportion to the RMS of the analized signal.
+in proportion to the RMS of the analyzed signal.
       
 
 * Next we require that the function :math:`f(x)` has a "bump" in
@@ -58,24 +58,113 @@ candidate for being the position of a local maximum of
 :math:`f(x)`. Note however that this is not a sufficient condition, we
 also need to ensure that the curvature has a minimum at this location.
       
-* This is achived by imposing two additional constraints on
+* This is achieved by imposing two additional constraints on
   :math:`f(x)`
 
-.. math::  
-   :nowrap:
+.. math:: \left.\frac{{\rm d}^3f}{{\rm d}x^3}\right|_{x=x^*} = 0
+   :label: f3const
 
-      \begin{eqnarray}
-      \left.\frac{{\rm d}^3f}{{\rm d}x^3}\right|_{x=x^*}  &=& 0
-      \nonumber \\
-      \left.\frac{{\rm d}^4f}{{\rm d}x^4}\right|_{x=x^*}  &>& 0
-      \end{eqnarray}
-      
+.. math:: \left.\frac{{\rm d}^4f}{{\rm d}x^4}\right|_{x=x^*} > 0
+   :label: f4const
+            
 
 These 4 constraints then ensure that the point :math:`x^*` is a local
 minimum of the curvature. Furthermore, even in the presence of both
 blending and noise, these expressions will yield the location of all
-the points that are possible canditates for the positions of Gaussian
-components in the target function.
+the points that are possible candidates for the positions of Gaussian
+components in the target function. Fig. :num:`#curvature` is an
+example of a function defined as the sum of three gaussians for which
+the conditions Eq. :eq:`f0const` - :eq:`f4const` are satisfied and the
+local minima of curvature are successfully found, even when blending
+of components is relevant.
+
+.. _curvature:
+
+.. figure:: curvature.pdf
+    :width: 4in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+    Example of the points of negative curvature of the function
+    :math:`f(x)`. In this case :math:`f(x)` is the sum of three
+    independent Gaussian functions (top). The vertical lines in each
+    panel show the conditions imposed on the derivatives to define the
+    points :math:`x^*`.
+
+
 
 Dealing with noise
 ------------------
+
+The numeral problem related to the solution shown in the previous
+section comes from the fact that calculating Eq. :eq:`f2const` -
+:eq:`f4const` is not trivial in the presence of noise. For instance,
+if the top panel of Fig. :num:`#curvature` is sampled with 100
+channels, and in each panel a random uncorrelated noise component is
+added at the 10% level, a simple finite difference prescription to
+calculate the derivative would lead to variations of the order
+:math:`\sim 1 / {\rm d}x \sim 10`. That is, the signal would be buried
+within the noise! 
+
+.. _deriv:
+
+.. figure:: deriv.pdf
+    :width: 4in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+    The top panel shows the same function used in
+    Fig. :num:`#curvature` but now random noise has been added to each
+    channel. In the bottom panel we show various estimates of the
+    first derivative. :math:`\alpha=0` corresponds to the finite
+    differences method, larger values of :math:`\alpha` makes the
+    function smoother.
+
+In order to solve this problem AGD uses a regularized version of the
+derivative (`Vogel (2002)
+<http://www.amazon.com/Computational-Methods-Problems-Frontiers-Mathematics/dp/0898715075>`_). If
+:math:`u = {\rm d}f(x)/{\rm d}x`, then the problem we solve is
+:math:`u = {\rm arg}\min_u\{R[u]\}` where :math:`R[u]` is the
+functional defined by
+
+.. math:: R[u] = \int | A u - f | + \alpha \int \sqrt{(Du)^2 +
+          \beta^2},
+   :label: deriv
+
+where :math:`A u = \int {\rm d}x\; u`. Note that if :math:`\alpha=0`
+this is equivalent to find the derivative of the function
+:math:`f(x)`, since we will be minimizing the difference between the
+integral of :math:`u = {\rm d}f(x)/{\rm d}x` and :math:`f(x)`
+itself. This, however, has the problem we discussed in the previous
+paragraph. Fig. :num:`#deriv` shows this case, it is clear that this
+simple approach fails to recover the behavior of the target
+function. If, on the other hand, :math:`\alpha > 0` an additional
+weight is added to the inverse problem in Eq. :eq:`deriv`, now the
+differences between successive points in :math:`u(x)` are taken into
+account. 
+
+The parameter :math:`\alpha` then controls how smooth the derivative
+is going to be. The risk here is that overshooting the value of this
+number can erase the intrinsic variations of the actual
+derivative. What is the optimal value of :math:`\alpha`? This question
+is answered by ``GaussPy`` through the training process of the
+algorithm. We refer the reader to the example chapters to learn how to
+use this feature.
+
+
+
+Two phases
+----------
+ 
+Within ``GaussPy`` is built-in the ability to automatically choose the
+best value of :math:`\alpha` for any input data set. Special caution
+has to be taken here. If a component is too narrow it can be confused
+with noise and smoothed away by the algorithm!
+
+In order to circumvent this issue ``GaussPy`` can be trainend in
+"two-steps". One for narrow components, and one for broad
+components. The result then is two independent values :math:`\alpha_1`
+and :math:`\alpha_2` each giving information about the scales of
+different features in the target function.

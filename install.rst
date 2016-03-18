@@ -69,6 +69,31 @@ Install the optional dependencies for plotting and optimization:
     sudo pip install matplotlib
     sudo apt-get install libgsl0-dev
 
+------------------------------
+Installing Dependencies on OSX
+------------------------------
+
+Installation on OSX can be done easily with homebrew.
+
+Install pip for easy installation of python packages:
+
+.. code-block:: bash
+
+    sudo easy_install pip
+
+Then install the required python packages:
+
+.. code-block:: bash
+
+    sudo pip install numpy scipy h5py lmfit
+
+Install the optional dependencies for plotting and optimization:
+
+.. code-block:: bash
+
+    sudo pip install matplotlib
+    sudo brew install gsl
+
 ------------------
 Installing GaussPy
 ------------------
