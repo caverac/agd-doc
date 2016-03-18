@@ -9,21 +9,23 @@ Installation
 Dependencies
 ------------
 
+You will need the following packages to run Gausspy. We list the version of each
+package which we know to be compatible with Gausspy.
+
 *  `python 2.7 <http://www.numpy.org/>`_
 
-* `numpy (\> v1.6.1) <http://www.numpy.org/>`_
+* `numpy (v1.6.1) <http://www.numpy.org/>`_
 
-* `scipy (\> v0.17.0) <http://www.scipy.org/>`_
+* `scipy (v0.17.0) <http://www.scipy.org/>`_
 
-* `lmfit (\> v0.9.2) <https://lmfit.github.io/lmfit-py/intro.html>`_
+* `lmfit (v0.9.2) <https://lmfit.github.io/lmfit-py/intro.html>`_
 
-* `h5py (\> v2.0.1) <http://www.h5py.org/>`_
+* `h5py (v2.0.1) <http://www.h5py.org/>`_
 
 
-If you do not already have Python 2.7, you can
-install the 
-`Anaconda Scientific Python distribution <https://store.continuum.io/cshop/anaconda/>`_, 
-which comes pre-loaded with `numpy`, `scipy`, and `h5py`.
+If you do not already have Python 2.7, you can install the `Anaconda Scientific
+Python distribution <https://store.continuum.io/cshop/anaconda/>`_, which comes
+pre-loaded with `numpy`, `scipy`, and `h5py`.
 
 ---------------------
 Optional Dependencies
@@ -69,6 +71,10 @@ Install the optional dependencies for plotting and optimization:
 
     sudo pip install matplotlib
     sudo apt-get install libgsl0-dev
+
+------------------------------
+Installing Dependencies on OSX
+------------------------------
 
 ------------------
 Installing GaussPy
