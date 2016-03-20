@@ -361,7 +361,7 @@ These results demonstrate that our choice of :math:`\alpha` has a significant ef
 .. _training-example:
 
 ======================================
-Training AGD to select :math:`\alpha`
+Training AGD to Select Alpha
 ======================================
 
 Creating a Synthetic Training Dataset
@@ -584,6 +584,45 @@ For GaussPy to be sensitive to two types of Gaussian functions contained within 
 
 Training for Two Phases: :math:`\alpha_1` and :math:`\alpha_2`
 ----------------------------------------------------------------
+
+Using the example from the :ref:`multiple-gaussians-tutorial`, we will train AGD to allow for two different values of :math:`\alpha`. This gives GaussPy enough flexibilty to use appropriate values of :math:`\alpha` to fit both narrow and wide features simultaneously. We will use the same training dataset constructed in :ref:`training-example`. We must set the following parameters:
+
+1. ``FILENAME``: the filename of the training dataset in GaussPy-friendly format.
+
+2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy will not fit components.
+
+3. ``alpha1_i, alpha2_i```: initial choices for :math:`\alpha_1` and :math:`\alpha_2`
+
+The training will be the same as in :ref:`training-example`, however we will set the GaussPy parameter `phase` equal to `two` instead of `one` to indicate that we would like to solve for two different values of :math:`\alpha`.
+
+.. code-block:: python
+
+    # Select the optimal value of alpha by training the AGD algorithm
+
+    import gausspy.gp as gp
+
+    # Set necessary parameters
+    FILENAME = 'training_data.pickle'
+    snr_thresh = 5.
+    alpha1_i = 12.
+    alpha2_i = 4.
+
+    g = gp.GaussianDecomposer()
+
+    # Next, load the training dataset for analysis:
+    g.load_training_data(FILENAME)
+
+    # Set GaussPy parameters
+    g.set('phase', 'two')
+    g.set('SNR_thresh', [snr_thresh, snr_thresh])
+    g.set('mode','conv')
+
+    # Train AGD starting with initial guess for alpha
+    g.train(alpha1_initial = alpha1_i, alpha2_initial = alpha2_i, plot=False,
+        verbose = False, mode = 'conv',
+        learning_rate = 1.0, eps = 1.0, MAD = 0.1)
+
+Following training, GaussPy converges on values of :math:`\alpha_1 = 10.58` and :math:`\alpha_2 = 9.21` in 286 iterations, with an accuracy of 75.3%. Clearly, the two-phase decomposition improves the accuracy of the decomposition, of course at the expense of introducing a second free parameter in the decomposition. In general, for datasets containing more than one type of component (corresponding to different physical sources, for example), two-phase decomposition will maximize the decompositon accuracy.
 
 
 
