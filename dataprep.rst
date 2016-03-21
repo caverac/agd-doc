@@ -273,14 +273,17 @@ how well the decomposition went.
     import pickle
     import matplotlib.pyplot as plt
 
+    # load the original data
     FILENAME_DATA_GAUSSPY = 'cube.pickle'
     data = pickle.load(open(FILENAME_DATA_GAUSSPY))
 
+    # load decomposed data
     FILENAME_DATA_DECOMP = 'cube_decomposed.pickle'
     data_decomposed = pickle.load(open(FILENAME_DATA_DECOMP))
 
     index_values =  np.argsort(np.random.randn(5000))
 
+    # plot random results
     fig = plt.figure(0,[9,9])
 
     for i in range(9):
@@ -308,7 +311,9 @@ how well the decomposition went.
 
     plt.show()
 
-Fig. :num:`#cube-decomposed` displays an example set of spectra from the data cube and the GaussPy decomposition using trained values of :math:`\alpha_1=2.87` and :math:`\alpha_2=10.61`.
+Fig. :num:`#cube-decomposed` displays an example set of spectra from the data
+cube and the GaussPy decomposition using trained values of :math:`\alpha_1=2.87`
+and :math:`\alpha_2=10.61`.
 
 .. _cube-decomposed:
 
