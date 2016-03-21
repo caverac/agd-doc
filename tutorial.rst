@@ -83,7 +83,7 @@ python pickle file to be read later by GaussPy.
     MEAN = 256
 
     # Initialize
-    gausspy_data = {}
+    data = {}
     chan = np.arange(NCHANNELS)
     errors = np.ones(NCHANNELS) * RMS
 
@@ -91,11 +91,11 @@ python pickle file to be read later by GaussPy.
     spectrum += gaussian(AMP, FWHM, MEAN)(chan)
 
     # Enter results into AGD dataset
-    gausspy_data['data_list'] = gausspy_data.get('data_list', []) + [spectrum]
-    gausspy_data['x_values'] = gausspy_data.get('x_values', []) + [chan]
-    gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
+    data['data_list'] = data.get('data_list', []) + [spectrum]
+    data['x_values'] = data.get('x_values', []) + [chan]
+    data['errors'] = data.get('errors', []) + [errors]
 
-    pickle.dump(gausspy_data, open(FILENAME, 'w'))
+    pickle.dump(data, open(FILENAME, 'w'))
 
 
 Running GaussPy
@@ -290,7 +290,7 @@ The following code provides an example of how to construct a Gaussian function w
     NCHANNELS = 512
 
     # Initialize
-    gausspy_data = {}
+    data = {}
     chan = np.arange(NCHANNELS)
     errors = np.ones(NCHANNELS) * RMS
 
@@ -301,11 +301,11 @@ The following code provides an example of how to construct a Gaussian function w
         spectrum += gaussian(a, w, m)(chan)
 
     # Enter results into AGD dataset
-    gausspy_data['data_list'] = gausspy_data.get('data_list', []) + [spectrum]
-    gausspy_data['x_values'] = gausspy_data.get('x_values', []) + [chan]
-    gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
+    data['data_list'] = data.get('data_list', []) + [spectrum]
+    data['x_values'] = data.get('x_values', []) + [chan]
+    data['errors'] = data.get('errors', []) + [errors]
 
-    pickle.dump(gausspy_data, open(FILENAME, 'w'))
+    pickle.dump(data, open(FILENAME, 'w'))
 
 A plot of the spectrum constructed above is included in Fig. :num:`#multiple-gaussians`.
 
@@ -452,7 +452,7 @@ With the above parameters specified, we can proceed with constructing a set of s
     # Create training dataset with Gaussian profiles -cont-
 
     # Initialize
-    gausspy_data = {}
+    data = {}
     chan = np.arange(NCHANNELS)
     errors = np.ones(NCHANNELS) * RMS
 
@@ -479,18 +479,18 @@ With the above parameters specified, we can proceed with constructing a set of s
             means.append(m)
 
         # Enter results into AGD dataset
-        gausspy_data['data_list'] = gausspy_data.get('data_list', []) + [spectrum_i]
-        gausspy_data['x_values'] = gausspy_data.get('x_values', []) + [chan]
-        gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
+        data['data_list'] = data.get('data_list', []) + [spectrum_i]
+        data['x_values'] = data.get('x_values', []) + [chan]
+        data['errors'] = data.get('errors', []) + [errors]
 
         # If training data, keep answers
         if TRAINING_SET:
-            gausspy_data['amplitudes'] = gausspy_data.get('amplitudes', []) + [amps]
-            gausspy_data['fwhms'] = gausspy_data.get('fwhms', []) + [fwhms]
-            gausspy_data['means'] = gausspy_data.get('means', []) + [means]
+            data['amplitudes'] = data.get('amplitudes', []) + [amps]
+            data['fwhms'] = data.get('fwhms', []) + [fwhms]
+            data['means'] = data.get('means', []) + [means]
 
     # Dump synthetic data into specified filename
-    pickle.dump(gausspy_data, open(FILENAME, 'w'))
+    pickle.dump(data, open(FILENAME, 'w'))
 
 
 Training the Algorithm
@@ -577,7 +577,6 @@ With a trained value of :math:`\alpha` in hand, we can proceed to decompose our 
 
     # Save decomposition information
     pickle.dump(data_decomp, open(FILENAME_DATA_DECOMP, 'w'))
-
 
 Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fitting the "Multiple Gaussians" spectrum with a trained value of :math:`\alpha=9.01`.
 
