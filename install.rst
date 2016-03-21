@@ -49,8 +49,8 @@ Download GaussPy from...
 Installing Dependencies on Linux
 --------------------------------
 
-You will need several libraries which the GSL, h5py, and scipy libraries depend
-on. Install these required packages with:
+You will need several libraries which the `GSL`, `h5py`, and `scipy` libraries
+depend on. Install these required packages with:
 
 .. code-block:: bash
 
@@ -106,18 +106,18 @@ Installing GaussPy
 
 To install make sure that all dependences are already installed and properly
 linked to python --python has to be able to load them--. Then cd to the local
-directory containing gausspy and type
+directory containing GaussPy and install via
 
 .. code-block:: bash
     
     python setup.py install
 
 If you don't have root access and/or wish a local installation of
-gausspy then use
+GaussPy then use
 
 .. code-block:: bash
     
     python setup.py install --user
 
-change the 'requires' statement in setup.py to include scipy and lmfit
+change the 'requires' statement in setup.py to include `scipy` and `lmfit`.
 
