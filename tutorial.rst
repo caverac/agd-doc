@@ -546,7 +546,7 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy will not fit components.
 
-3. ``alpha_i``: initial choice for :math:`\alpha`
+3. ``alpha_initial``: initial choice for :math:`\alpha`
 
 .. code-block:: python
 
@@ -557,7 +557,7 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
     # Set necessary parameters
     FILENAME = 'training_data.pickle'
     snr_thresh = 5.
-    alpha_i = 20.
+    alpha_initial = 20.
 
     g = gp.GaussianDecomposer()
 
@@ -570,15 +570,15 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
     g.set('mode','conv')
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha_i, plot=False,
+    g.train(alpha1_initial = alpha_initial, plot=False,
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
-GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_i` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_i` and recompute the decomposition until the process converges. Convergence is achieved when the reduced :math:`\chi^2` is less than 0.03 for at least 10 iterations. The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
+GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_initial` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_initial` and recompute the decomposition until the process converges. Convergence is achieved when the reduced :math:`\chi^2` is less than 0.03 for at least 10 iterations. The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
 
-The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of :math:`\alpha_i=20` the training process converges to :math:`\alpha=9.01` with an accuracy of 70.6%, and required 371 iterations.
+The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of :math:`\alpha_initial=20` the training process converges to :math:`\alpha=9.01` with an accuracy of 70.6%, and required 371 iterations.
 
-To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_i=4`, AGD converges to a value of :math:`\alpha=8.67` with an accuracy of 70.7% and required 185 iterations. For :math:`\alpha_i=10`, the training converges to :math:`\alpha=9.01` with an accuracy of 70.6% following 132 iterations. These results indicate that the training will converge on a range of :math:`\alpha` values that decompose the target spectrum with similar accuracy. Repeating the training with a value of :math:`\alpha_i` between 8.67 and 9.01 will converge to :math:`\alpha=\alpha_i` within ~30 iterations. (results will vary very slightly for each test of the above code, given the random selection of component parameters in the training dataset).
+To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_initial=4`, AGD converges to a value of :math:`\alpha=8.67` with an accuracy of 70.7% and required 185 iterations. For :math:`\alpha_initial=10`, the training converges to :math:`\alpha=9.01` with an accuracy of 70.6% following 132 iterations. These results indicate that the training will converge on a range of :math:`\alpha` values that decompose the target spectrum with similar accuracy. Repeating the training with a value of :math:`\alpha_initial` between 8.67 and 9.01 will converge to :math:`\alpha=\alpha_initial` within ~30 iterations. (results will vary very slightly for each test of the above code, given the random selection of component parameters in the training dataset).
 
 
 Running GaussPy using Trained :math:`\alpha`
