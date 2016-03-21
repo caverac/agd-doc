@@ -570,7 +570,7 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
     g.set('mode','conv')
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha_initial, plot=False,
+    g.train(alpha1_initialnitial = alpha_initial, plot=False,
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
@@ -655,7 +655,9 @@ accuracy of ~70%. As in the :ref:`simple-example-tutorial` and
     # Save decomposition information
     pickle.dump(data_decomp, open(FILENAME_DATA_DECOMP, 'w'))
 
-Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fitting the "Multiple Gaussians" spectrum with a trained value of :math:`\alpha=9.01`.
+Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of
+fitting the "Multiple Gaussians" spectrum with a trained value of
+:math:`\alpha=9.01`.
 
 .. _multiple-gaussians-trained-decomposed:
 
@@ -671,20 +673,36 @@ Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fittin
 Two-Phase Decompositon
 =============================
 
-In the :ref:`training-example` chapter, we learned how to "train" AGD to select the optimal value of the smoothing parameter :math:`\alpha` using a training dataset with known underlying decomposition. This trained value is essentially tuned to find a particular type of Gaussian shape within the data. However, when more than one family or phase of Gaussian shapes is contained within a spectrum, one value of :math:`\alpha` is not enough to recover all important spectral information. For example, in radio astronomical observations of absorption by neutral hydrogen at 21 cm, we find narrow and strong lines in addition to wide, shallow lines indicative of two different populations of material, namely the cold and warm neutral media.
+In the :ref:`training-example` chapter, we learned how to "train" AGD to select
+the optimal value of the smoothing parameter :math:`\alpha` using a training
+dataset with known underlying decomposition. This trained value is essentially
+tuned to find a particular type of Gaussian shape within the data. However, when
+more than one family or phase of Gaussian shapes is contained within a spectrum,
+one value of :math:`\alpha` is not enough to recover all important spectral
+information. For example, in radio astronomical observations of absorption by
+neutral hydrogen at 21 cm, we find narrow and strong lines in addition to wide,
+shallow lines indicative of two different populations of material, namely the
+cold and warm neutral media.
 
-For GaussPy to be sensitive to two types of Gaussian functions contained within a dataset, we must use the "two-phase" version of AGD. The two-phase decomposition makes use of two values of the smoothing parameter :math:`\alpha`, one for each "phase" contained within the dataset.
+For GaussPy to be sensitive to two types of Gaussian functions contained within
+a dataset, we must use the "two-phase" version of AGD. The two-phase
+decomposition makes use of two values of the smoothing parameter :math:`\alpha`,
+one for each "phase" contained within the dataset.
 
 Training for Two Phases: :math:`\alpha_1` and :math:`\alpha_2`
 ----------------------------------------------------------------
 
-Using the example from the :ref:`multiple-gaussians-tutorial`, we will train AGD to allow for two different values of :math:`\alpha`. This gives GaussPy enough flexibilty to use appropriate values of :math:`\alpha` to fit both narrow and wide features simultaneously. We will use the same training dataset constructed in :ref:`training-example`. We must set the following parameters:
+Using the example from the :ref:`multiple-gaussians-tutorial`, we will train AGD
+to allow for two different values of :math:`\alpha`. This gives GaussPy enough
+flexibilty to use appropriate values of :math:`\alpha` to fit both narrow and
+wide features simultaneously. We will use the same training dataset constructed
+in :ref:`training-example`. We must set the following parameters:
 
 1. ``FILENAME``: the filename of the training dataset in GaussPy-friendly format.
 
 2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy will not fit components.
 
-3. ``alpha1_i, alpha2_i```: initial choices for :math:`\alpha_1` and :math:`\alpha_2`
+3. ``alpha1_initial, alpha2_initial```: initial choices for :math:`\alpha_1` and :math:`\alpha_2`
 
 The training will be the same as in :ref:`training-example`, however we will set the GaussPy parameter `phase` equal to `two` instead of `one` to indicate that we would like to solve for two different values of :math:`\alpha`.
 
@@ -697,8 +715,8 @@ The training will be the same as in :ref:`training-example`, however we will set
     # Set necessary parameters
     FILENAME = 'training_data.pickle'
     snr_thresh = 5.
-    alpha1_i = 12.
-    alpha2_i = 4.
+    alpha1_initial = 12.
+    alpha2_initial = 4.
 
     g = gp.GaussianDecomposer()
 
@@ -711,7 +729,7 @@ The training will be the same as in :ref:`training-example`, however we will set
     g.set('mode','conv')
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha1_i, alpha2_initial = alpha2_i, plot=False,
+    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial, plot=False,
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
