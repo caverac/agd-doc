@@ -579,10 +579,10 @@ GausspPy will decompose the training dataset with the initial choice of
 decomposition to compute the accuracy of the decomposition. The training process
 will then iteratively change the value of :math:`\alpha_{initial}` and recompute
 the decomposition until the process converges. Convergence is achieved when the
-reduced :math:`\chi^2` is less than 0.03 for at least 10 iterations. The
-accuracy of the decomposition associated with the converged value of
-:math:`\alpha` is a description of how well GaussPy can recover the true
-underlying decomposition.
+change between iterations of the reduced :math:`\chi^2` is less than 0.03 for at
+least 10 iterations. The accuracy of the decomposition associated with the
+converged value of :math:`\alpha` is a description of how well GaussPy can
+recover the true underlying decomposition.
 
 The above training dataset parameters were selected with the
 :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the
