@@ -22,9 +22,9 @@ GaussPy. The following code provides an example of how to read a fits-formatted
 datacube and store the spectral information. The necessary parameters to specify
 here are:
 
-1. ``DATA_file``: the fits filename of the target data cube.
+1. ``FILENAME_DATA``: the fits filename of the target data cube.
 
-2. ``DATA_out``: the filename to store the GaussPy-friendly data in
+2. ``FILENAME_DATA_GAUSSPY``: the filename to store the GaussPy-friendly data in
 
 3. ``RMS``: estiamte of the RMS uncertainty per channel for constructing the error arrays
 
@@ -37,11 +37,11 @@ here are:
     from astropy.io import fits
 
     # Specify necessary parameters
-    DATA_file = 'M33only.fits'
-    DATA_out = 'cube.pickle'
+    FILENAME_DATA = 'M33only.fits'
+    FILENAME_DATA_GAUSSPY = 'cube.pickle'
     RMS = 0.06
 
-    hdu_list = fits.open(DATA_file)
+    hdu_list = fits.open(FILENAME_DATA)
     hdu = hdu_list[0]
     cube = hdu.data
 
@@ -67,7 +67,7 @@ here are:
             data['location'] = data.get('location', []) + [location]
 
     # Save decomposition information
-    pickle.dump(data, open(DATA_out, 'w'))
+    pickle.dump(data, open(FILENAME_DATA_GAUSSPY, 'w'))
 
 The output pickle file from the above example code contains a python dictionary with four keys, including the independent and dependent arrays (i.e. channels and spectral values), an array per spectrum describing the uncertainty per channel, and the (x,y) pixel location within the datacube for reference.
 
@@ -226,7 +226,7 @@ With the trained values in hand, we now decompose the target dataset:
     snr_thresh = 5.0
 
     DATA = 'cube.pickle'
-    DATA_out = 'cube_decomposed.pickle'
+    FILENAME_DATA_GAUSSPY = 'cube_decomposed.pickle'
 
     # Load GaussPy
     g = gp.GaussianDecomposer()
@@ -242,7 +242,7 @@ With the trained values in hand, we now decompose the target dataset:
     decomposed_data = g.batch_decomposition(DATA)
 
     # Save decomposition information
-    pickle.dump(decomposed_data, open(DATA_out, 'w'))
+    pickle.dump(decomposed_data, open(FILENAME_DATA_GAUSSPY, 'w'))
 
 
 And plot the results for an example set of 9 spectra, randomly selected, to see how well the decomposition went.
