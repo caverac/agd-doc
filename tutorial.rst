@@ -100,7 +100,12 @@ python pickle file to be read later by GaussPy.
 
 Running GaussPy
 ----------------------------
-With our simple dataset in hand, we can use GaussPy to decompose the spectrum into Gaussian functions. To do this, we must specify the smoothing parameter :math:`\alpha`. For now, we will guess a value of :math:`\alpha=10`. Later in this chapter we will learn about training AGD to select the optimal value of :math:`\alpha`.
+
+With our simple dataset in hand, we can use GaussPy to decompose the spectrum
+into Gaussian functions. To do this, we must specify the smoothing parameter
+:math:`\alpha`. For now, we will guess a value of :math:`\alpha=10`. Later in
+this chapter we will learn about training AGD to select the optimal value of
+:math:`\alpha`.
 
 The following is an example code for running GaussPy. We will use the "one-phase" decomposition to begin with. We must specify the following parameters:
 
@@ -108,9 +113,9 @@ The following is an example code for running GaussPy. We will use the "one-phase
 
 2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
 
-3. ``DATA``: the filename containing the dataset to-be-decomposed, constructed in the previous section (or any GaussPy-friendly dataset)
+3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed, constructed in the previous section (or any GaussPy-friendly dataset)
 
-4. ``DATA_out``: filename to store the decomposition results from GaussPy.
+4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from GaussPy.
 
 .. code-block:: python
 
@@ -121,8 +126,8 @@ The following is an example code for running GaussPy. We will use the "one-phase
     # Specify necessary parameters
     alpha1 = 10.
     snr_thresh = 5.
-    DATA = 'simple_gaussian.pickle'
-    DATA_out = 'simple_gaussian_decomposed.pickle'
+    FILENAME_DATA = 'simple_gaussian.pickle'
+    FILENAME_DATA_DECOMP = 'simple_gaussian_decomposed.pickle'
 
     # Load GaussPy
     g = gp.GaussianDecomposer()
@@ -134,16 +139,16 @@ The following is an example code for running GaussPy. We will use the "one-phase
     g.set('mode','conv')
 
     # Run GaussPy
-    decomposed_data = g.batch_decomposition(DATA)
+    data_decomp = g.batch_decomposition(FILENAME_DATA)
 
     # Save decomposition information
-    pickle.dump(decomposed_data, open(DATA_out, 'w'))
+    pickle.dump(data_decomp, open(FILENAME_DATA_DECOMP, 'w'))
 
 After AGD determines the Gaussian decomposition, GaussPy then performs a least squares fit of the inital AGD model to the data to produce a final fit solution. The file containing the fit results is a python pickle file. The contents of this file can be viewed by printing the keys within the saved dictionary via,
 
 .. code-block:: python
 
-    print decomposed_data.keys()
+    print data_decomp.keys()
 
 The most salient information included in this file are the values for the ``amplitudes``, ``fwhms`` and ``means`` of each fitted Gaussian component. These include,
 
@@ -161,9 +166,9 @@ Plot Decomposition Results
 
 The following is an example python script for plotting the original spectrum and GaussPy decomposition results. We must specify the following parameters:
 
-1. ``DATA``: the filename containing the dataset to-be-decomposed.
+1. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed.
 
-2. ``DATA_decomposed``: the filename containing the GaussPy decomposition results.
+2. ``FILENAME_DATA_decomposed``: the filename containing the GaussPy decomposition results.
 
 .. code-block:: python
 
@@ -178,18 +183,18 @@ The following is an example python script for plotting the original spectrum and
     def unravel(list):
         return np.array([i for array in list for i in array])
 
-    DATA = 'simple_gaussian.pickle'
-    DATA_decomposed = 'simple_gaussian_decomposed.pickle'
+    FILENAME_DATA = 'simple_gaussian.pickle'
+    FILENAME_DATA_decomposed = 'simple_gaussian_decomposed.pickle'
 
-    data = pickle.load(open(DATA))
+    data = pickle.load(open(FILENAME_DATA))
     spectrum = unravel(data['data_list'])
     chan = unravel(data['x_values'])
     errors = unravel(data['errors'])
 
-    decomposed_data = pickle.load(open(DATA_decomposed))
-    means_fit = unravel(decomposed_data['means_fit'])
-    amps_fit = unravel(decomposed_data['amplitudes_fit'])
-    fwhms_fit = unravel(decomposed_data['fwhms_fit'])
+    data_decomp = pickle.load(open(FILENAME_DATA_decomposed))
+    means_fit = unravel(data_decomp['means_fit'])
+    amps_fit = unravel(data_decomp['amplitudes_fit'])
+    fwhms_fit = unravel(data_decomp['fwhms_fit'])
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -322,9 +327,9 @@ With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simpl
 
 2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
 
-3. ``DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
+3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
 
-4. ``DATA_out``: filename to store the decomposition results from GaussPy.
+4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from GaussPy.
 
 .. code-block:: python
 
@@ -335,8 +340,8 @@ With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simpl
     # Specify necessary parameters
     alpha1 = 20.
     snr_thresh = 5.
-    DATA = 'multiple_gaussians.pickle'
-    DATA_out = 'multiple_gaussians_decomposed.pickle'
+    FILENAME_DATA = 'multiple_gaussians.pickle'
+    FILENAME_DATA_DECOMP = 'multiple_gaussians_decomposed.pickle'
 
     # Load GaussPy
     g = gp.GaussianDecomposer()
@@ -348,10 +353,10 @@ With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simpl
     g.set('mode','conv')
 
     # Run GaussPy
-    decomposed_data = g.batch_decomposition(DATA)
+    data_decomp = g.batch_decomposition(FILENAME_DATA)
 
     # Save decomposition information
-    pickle.dump(decomposed_data, open(DATA_out, 'w'))
+    pickle.dump(data_decomp, open(FILENAME_DATA_DECOMP, 'w'))
 
 Plot Decomposition Results
 ----------------------------
@@ -541,9 +546,9 @@ With a trained value of :math:`\alpha` in hand, we can proceed to decompose our 
 
 2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
 
-3. ``DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
+3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
 
-4. ``DATA_out``: filename to store the decomposition results from GaussPy.
+4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from GaussPy.
 
 .. code-block:: python
 
@@ -555,8 +560,8 @@ With a trained value of :math:`\alpha` in hand, we can proceed to decompose our 
     alpha1 = 9.01
     snr_thresh = 5.
 
-    DATA = 'multiple_gaussians.pickle'
-    DATA_out = 'multiple_gaussians_trained_decomposed.pickle'
+    FILENAME_DATA = 'multiple_gaussians.pickle'
+    FILENAME_DATA_DECOMP = 'multiple_gaussians_trained_decomposed.pickle'
 
     # Load GaussPy
     g = gp.GaussianDecomposer()
@@ -568,10 +573,10 @@ With a trained value of :math:`\alpha` in hand, we can proceed to decompose our 
     g.set('mode','conv')
 
     # Run GaussPy
-    decomposed_data = g.batch_decomposition(DATA)
+    data_decomp = g.batch_decomposition(FILENAME_DATA)
 
     # Save decomposition information
-    pickle.dump(decomposed_data, open(DATA_out, 'w'))
+    pickle.dump(data_decomp, open(FILENAME_DATA_DECOMP, 'w'))
 
 
 Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of fitting the "Multiple Gaussians" spectrum with a trained value of :math:`\alpha=9.01`.
