@@ -22,12 +22,12 @@ GaussPy. The following code provides an example of how to read a fits-formatted
 datacube and store the spectral information. The necessary parameters to specify
 here are:
 
-1. ``FILENAME_DATA``: the fits filename of the target data cube.
+1. ``FILENAME_DATA``: the fits filename of the target data cube
 
 2. ``FILENAME_DATA_GAUSSPY``: the filename to store the GaussPy-friendly data in
 
-3. ``RMS``: estiamte of the RMS uncertainty per channel for constructing the error arrays
-
+3. ``RMS``: estimate of the RMS uncertainty per channel for constructing the
+   error arrays
 
 .. code-block:: python
 
@@ -60,7 +60,7 @@ here are:
             # get the spectrum location
             location = np.array((i, j))
 
-            # Enter results into AGD dataset
+            # Enter results into GaussPy-friendly dataset
             data['data_list'] = data.get('data_list', []) + [spectrum]
             data['x_values'] = data.get('x_values', []) + [chan]
             data['errors'] = data.get('errors', []) + [errors]
@@ -69,7 +69,10 @@ here are:
     # Save decomposition information
     pickle.dump(data, open(FILENAME_DATA_GAUSSPY, 'w'))
 
-The output pickle file from the above example code contains a python dictionary with four keys, including the independent and dependent arrays (i.e. channels and spectral values), an array per spectrum describing the uncertainty per channel, and the (x,y) pixel location within the datacube for reference.
+The output pickle file from the above example code contains a python dictionary
+with four keys, including the independent and dependent arrays (i.e. channels
+and spectral values), an array per spectrum describing the uncertainty per
+channel, and the (x,y) pixel location within the datacube for reference.
 
 Creating a Synthetic Training Dataset
 ----------------------------
