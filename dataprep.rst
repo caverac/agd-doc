@@ -60,6 +60,8 @@ here are:
             # get the spectrum location
             location = np.array((i, j))
 
+            print location
+
             # Enter results into GaussPy-friendly dataset
             data['data_list'] = data.get('data_list', []) + [spectrum]
             data['x_values'] = data.get('x_values', []) + [chan]
@@ -67,7 +69,7 @@ here are:
             data['location'] = data.get('location', []) + [location]
 
     # Save decomposition information
-    pickle.dump(cube, open(FILENAME_DATA_GAUSSPY, 'w'))
+    pickle.dump(data, open(FILENAME_DATA_GAUSSPY, 'w'))
 
 The output pickle file from the above example code contains a python dictionary
 with four keys, including the independent and dependent arrays (i.e. channels
@@ -188,7 +190,8 @@ With a synthetic training dataset in hand, we train AGD to select two values of
 1. ``FILENAME_TRAIN``: the pickle file containing the training dataset in GaussPy
    format
 
-2. ``snr_thresh``: the signal to noise ratio below which GaussPy will not fit a component
+2. ``snr_thresh``: the signal to noise ratio below which GaussPy will not fit a
+   component
 
 3. ``alpha1_initial, alpha2_initial`` initial choices of the two :math:`\alpha`
    parameters
