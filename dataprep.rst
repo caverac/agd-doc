@@ -222,7 +222,10 @@ With a synthetic training dataset in hand, we train AGD to select two values of
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
-Training: starting with values of :math:`\alpha_{1,initial}=3` and :math:`\alpha_{2,initial}=12`, the training process converges to :math:`\alpha_1=2.87` and :math:`\alpha_2=10.61` with an accuracy of 71.2% within 90 iterations.
+Training: starting with values of :math:`\alpha_{1,initial}=3` and
+:math:`\alpha_{2,initial}=12`, the training process converges to
+:math:`\alpha_1=2.87` and :math:`\alpha_2=10.61` with an accuracy of 71.2%
+within 90 iterations.
 
 Decomposing the Datacube
 ----------------------------
@@ -240,8 +243,8 @@ With the trained values in hand, we now decompose the target dataset:
     alpha2 = 10.61
     snr_thresh = 5.0
 
-    DATA = 'cube.pickle'
-    FILENAME_DATA_GAUSSPY = 'cube_decomposed.pickle'
+    FILENAME_DATA_GAUSSPY = 'cube.pickle'
+    FILENAME_DATA_DECOMP = 'cube_decomposed.pickle'
 
     # Load GaussPy
     g = gp.GaussianDecomposer()
@@ -254,13 +257,14 @@ With the trained values in hand, we now decompose the target dataset:
     g.set('mode','conv')
 
     # Run GaussPy
-    decomposed_data = g.batch_decomposition(DATA)
+    decomposed_data = g.batch_decomposition(FILENAME_DATA_GAUSSPY)
 
     # Save decomposition information
-    pickle.dump(decomposed_data, open(FILENAME_DATA_GAUSSPY, 'w'))
+    pickle.dump(decomposed_data, open(FILENAME_DATA_DECOMP, 'w'))
 
 
-And plot the results for an example set of 9 spectra, randomly selected, to see how well the decomposition went.
+And plot the results for an example set of 9 spectra, randomly selected, to see
+how well the decomposition went.
 
 .. code-block:: python
 
@@ -269,11 +273,11 @@ And plot the results for an example set of 9 spectra, randomly selected, to see 
     import pickle
     import matplotlib.pyplot as plt
 
-    datafile = 'cube.pickle'
-    data = pickle.load(open(datafile))
+    FILENAME_DATA_GAUSSPY = 'cube.pickle'
+    data = pickle.load(open(FILENAME_DATA_GAUSSPY))
 
-    datafile_decomposed = 'cube_decomposed.pickle'
-    data_decomposed = pickle.load(open(datafile_decomposed))
+    FILENAME_DATA_DECOMP = 'cube_decomposed.pickle'
+    data_decomposed = pickle.load(open(FILENAME_DATA_DECOMP))
 
     index_values =  np.argsort(np.random.randn(5000))
 
