@@ -6,7 +6,7 @@ Simple Example Tutorial
 
 Constructing a GaussPy-Friendly Dataset
 --------------------------------------
-Before implementing AGD, we first must put data into a format readable by GaussPy. GaussPy requires the indepenent and dependent spectral arrays (e.g., channels and amplitude) and an estimate of the per-channel noise in the specrum.
+Before implementing AGD, we first must put data into a format readable by GaussPy. GaussPy requires the indepenent and dependent spectral arrays (e.g., channels and amplitude) and an estimate of the per-channel noise in the spectrum.
 
 To begin, we can create a simple Gaussian function of the form:
 
@@ -40,6 +40,7 @@ have made the following assumptions:
 The following code describes an example of how to create spectrum with Gaussian shape and store the channels, amplitude and error arrays in a python pickle file to be read later by GaussPy.
 
 .. code-block:: python
+
     # Create simple Gaussian profile with added noise
     # Store in format required for GaussPy
 
