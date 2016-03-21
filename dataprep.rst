@@ -222,7 +222,7 @@ With a synthetic training dataset in hand, we train AGD to select two values of
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
-Training: starting with values of :math:`\alpha_{1i}=3` and :math:`\alpha_{2i}=12`, the training process converges to :math:`\alpha_1=2.87` and :math:`\alpha_2=10.61` with an accuracy of 71.2% within 90 iterations.
+Training: starting with values of :math:`\alpha_{1,initial}=3` and :math:`\alpha_{2,initial}=12`, the training process converges to :math:`\alpha_1=2.87` and :math:`\alpha_2=10.61` with an accuracy of 71.2% within 90 iterations.
 
 Decomposing the Datacube
 ----------------------------
