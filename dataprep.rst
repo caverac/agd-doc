@@ -135,7 +135,7 @@ possible.
     FILENAME_TRAIN = 'cube_training_data.pickle'
 
     # Initialize
-    gausspy_data = {}
+    data = {}
     chan = np.arange(NCHANNELS)
     errors = np.ones(NCHANNELS) * RMS
 
@@ -164,18 +164,18 @@ possible.
             means.append(m)
 
         # Enter results into AGD dataset
-        gausspy_data['data_list'] = gausspy_data.get('data_list', []) + [spectrum_i]
-        gausspy_data['x_values'] = gausspy_data.get('x_values', []) + [chan]
-        gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
+        data['data_list'] = data.get('data_list', []) + [spectrum_i]
+        data['x_values'] = data.get('x_values', []) + [chan]
+        data['errors'] = data.get('errors', []) + [errors]
 
         # If training data, keep answers
         if TRAINING_SET:
-            gausspy_data['amplitudes'] = gausspy_data.get('amplitudes', []) + [amps]
-            gausspy_data['fwhms'] = gausspy_data.get('fwhms', []) + [fwhms]
-            gausspy_data['means'] = gausspy_data.get('means', []) + [means]
+            data['amplitudes'] = data.get('amplitudes', []) + [amps]
+            data['fwhms'] = data.get('fwhms', []) + [fwhms]
+            data['means'] = data.get('means', []) + [means]
 
     # Dump synthetic data into specified filename
-    pickle.dump(gausspy_data, open(FILENAME_TRAIN, 'w'))
+    pickle.dump(data, open(FILENAME_TRAIN, 'w'))
 
 
 Training AGD to Select :math:`\alpha` values
