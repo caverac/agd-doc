@@ -20,7 +20,8 @@ where,
 
 1. ``NCOMPS`` is the number of Gaussian components in each spectrum
 
-2. ``(AMP, MEAN, FWHM)`` are the parameters of each Gaussian component
+2. ``(AMP, MEAN, FWHM)`` are the amplitude, mean location, and
+   full-width-half-maximum of each Gaussian component
 
 3. ``NCHANNELS`` is the number of channels in the spectrum (sets the resolution)
 
