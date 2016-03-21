@@ -168,7 +168,7 @@ The following is an example python script for plotting the original spectrum and
 
 1. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed.
 
-2. ``FILENAME_DATA_decomposed``: the filename containing the GaussPy decomposition results.
+2. ``FILENAME_DATA_DECOMP``: the filename containing the GaussPy decomposition results.
 
 .. code-block:: python
 
@@ -184,14 +184,14 @@ The following is an example python script for plotting the original spectrum and
         return np.array([i for array in list for i in array])
 
     FILENAME_DATA = 'simple_gaussian.pickle'
-    FILENAME_DATA_decomposed = 'simple_gaussian_decomposed.pickle'
+    FILENAME_DATA_DECOMP = 'simple_gaussian_decomposed.pickle'
 
     data = pickle.load(open(FILENAME_DATA))
     spectrum = unravel(data['data_list'])
     chan = unravel(data['x_values'])
     errors = unravel(data['errors'])
 
-    data_decomp = pickle.load(open(FILENAME_DATA_decomposed))
+    data_decomp = pickle.load(open(FILENAME_DATA_DECOMP))
     means_fit = unravel(data_decomp['means_fit'])
     amps_fit = unravel(data_decomp['amplitudes_fit'])
     fwhms_fit = unravel(data_decomp['fwhms_fit'])
@@ -219,6 +219,15 @@ The following is an example python script for plotting the original spectrum and
 
     plt.show()
 
+
+Fig. :num:`#simple-gaussian-decomposed` displays the results of the
+decomposition using the above example python code. Clearly the fit to the simple
+Gaussian spectrum is good. If we were to vary the value of :math:`\alpha`, the
+fit would not change significantly as the fit to a spectrum containing a single
+Gaussian funciton does not depend sensitively on the initial guesses, especially
+because GaussPy performs a least-squares fit after determining initial guesses
+for the fitted Gaussian parameters with AGD.
+
 .. _simple-gaussian-decomposed:
 
 .. figure:: simple_gaussian_decomposed.png
@@ -228,8 +237,6 @@ The following is an example python script for plotting the original spectrum and
     :alt: alternate text
 
     Example spectrum containing a single Gaussian function with added spectral noise, decomposed using GaussPy.
-
-Fig. :num:`#simple-gaussian-decomposed` displays the results of the decomposition using the above example python code. Clearly the fit to the simple Gaussian spectrum is good. If we were to vary the value of :math:`\alpha`, the fit would not change significantly as the fit to a spectrum containing a single Gaussian funciton does not depend sensitively on the initial guesses, especially because GaussPy performs a least-squares fit after determining initial guesses for the fitted Gaussian parameters with AGD.
 
 We can now move on from the simple example above to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
 
