@@ -4,12 +4,23 @@
 Prepping a Datacube
 ===================
 
-In this example we will download a datacube to decompose into individual spectra. The example cube we will use is from the GALFA-HI emission survey at the Arecibo Observatory, specifically the `M33 datacube <https://sites.google.com/site/galfahi/data>`_ from `Putman et al. 2009 <http://adsabs.harvard.edu/abs/2009ApJ...703.1486P>`_.
+In this example we will download a datacube to decompose into individual
+spectra. The example cube we will use is from the GALFA-HI emission survey at
+the Arecibo Observatory, specifically the `M33 datacube
+<https://sites.google.com/site/galfahi/data>`_ from `Putman et al. 2009
+<http://adsabs.harvard.edu/abs/2009ApJ...703.1486P>`_. You can directly download
+the cube from here:
+
+http://www.astro.columbia.edu/~mputman/M33only.fits.gz
+
 
 Storing Data cube in GaussPy-Friendly Format
 ----------------------------
 
-Before decomposing the datacube, we must store the data in a format readable by GaussPy. The following code provides an example of how to read a fits-formatted datacube and store the spectral information. The necessary parameters to specify here are:
+Before decomposing the datacube, we must store the data in a format readable by
+GaussPy. The following code provides an example of how to read a fits-formatted
+datacube and store the spectral information. The necessary parameters to specify
+here are:
 
 1. ``DATA_file``: the fits filename of the target data cube.
 
