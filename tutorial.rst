@@ -698,13 +698,17 @@ flexibilty to use appropriate values of :math:`\alpha` to fit both narrow and
 wide features simultaneously. We will use the same training dataset constructed
 in :ref:`training-example`. We must set the following parameters:
 
-1. ``FILENAME``: the filename of the training dataset in GaussPy-friendly format.
+1. ``FILENAME``: the filename of the training dataset in GaussPy-friendly format
 
-2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy will not fit components.
+2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy
+   will not fit components
 
-3. ``alpha1_initial, alpha2_initial```: initial choices for :math:`\alpha_1` and :math:`\alpha_2`
+3. ``alpha1_initial, alpha2_initial```: initial choices for :math:`\alpha_1` and
+   :math:`\alpha_2`
 
-The training will be the same as in :ref:`training-example`, however we will set the GaussPy parameter `phase` equal to `two` instead of `one` to indicate that we would like to solve for two different values of :math:`\alpha`.
+The training will be the same as in :ref:`training-example`, however we will set
+the GaussPy parameter `phase` equal to `two` instead of `one` to indicate that
+we would like to solve for two different values of :math:`\alpha`.
 
 .. code-block:: python
 
@@ -733,7 +737,13 @@ The training will be the same as in :ref:`training-example`, however we will set
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
-Following training, GaussPy converges on values of :math:`\alpha_1 = 10.58` and :math:`\alpha_2 = 9.21` in 286 iterations, with an accuracy of 75.3%. Clearly, the two-phase decomposition improves the accuracy of the decomposition, of course at the expense of introducing a second free parameter in the decomposition. In general, for datasets containing more than one type of component (corresponding to different physical sources, for example), two-phase decomposition will maximize the decompositon accuracy.
+Following training, GaussPy converges on values of :math:`\alpha_1 = 10.58` and
+:math:`\alpha_2 = 9.21` in 286 iterations, with an accuracy of 75.3%. Clearly,
+the two-phase decomposition improves the accuracy of the decomposition, of
+course at the expense of introducing a second free parameter in the
+decomposition. In general, for datasets containing more than one type of
+component (corresponding to different physical sources, for example), two-phase
+decomposition will maximize the decompositon accuracy.
 
 
 
