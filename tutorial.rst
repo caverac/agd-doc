@@ -41,25 +41,34 @@ the following assumptions:
 3. ``NCHANNELS = 512``
 
 4. ``RMS = 0.05``
-   
-.. raw:: latex
-
-    \clearpage
 
 In Fig. :num:`#simple-gaussian` we display the spectrum with the single Gaussian
 described above.
 
-The following code describes an example of how to create a spectrum with a
-Gaussian shape and store the channels, amplitude and error arrays in a python
-pickle file to be read later by GaussPy.
+.. _simple-gaussian:
+
+.. figure:: simple_gaussian.png
+    :width: 5in
+    :align: center
+    :figclass: align-center
+    :alt: alternate text
+
+    Example spectrum containing a single Gaussian function with added spectral noise.
+
+See the following code which describes an example of how to create a spectrum
+with a Gaussian shape and store the channels, amplitude and error arrays in a
+python pickle file to be read later by GaussPy.
 
 .. code-block:: python
+
     # Create simple Gaussian profile with added noise
     # Store in format required for GaussPy
 
     import numpy as np
     import pickle
 
+    # create a function which returns the values of the Gaussian function for a
+    # given x
     def gaussian(amp, fwhm, mean):
         return lambda x: amp * np.exp(-4. * np.log(2) * (x-mean)**2 / fwhm**2)
 
@@ -88,15 +97,6 @@ pickle file to be read later by GaussPy.
 
     pickle.dump(gausspy_data, open(FILENAME, 'w'))
 
-.. _simple-gaussian:
-
-.. figure:: simple_gaussian.png
-    :width: 5in
-    :align: center
-    :figclass: align-center
-    :alt: alternate text
-
-    Example spectrum containing a single Gaussian function with added spectral noise.
 
 Running GaussPy
 ----------------------------
