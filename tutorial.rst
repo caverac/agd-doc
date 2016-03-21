@@ -442,10 +442,9 @@ the following parameters:
 
 3. ``NCHANNELS = 512`` This number sets the resolution of each spectrum.
 
-4. :math:`\mathrm{AMP} \sim \mu(0.5, 4)`,
-   this way we ensure that every spectral feature is above the noise
-   level. Spectra with a more dominant contribution from the noise can
-   also be generated and used as training sets for AGD
+4. :math:`\mathrm{AMP} \sim \mu(0.5, 4)`, this way we ensure that every spectral
+   feature is above the noise level. Spectra with a more dominant contribution
+   from the noise can also be generated and used as training sets for AGD
 
 5. :math:`\mathrm{FWHM} \sim \mu(20, 80)` and :math:`\mathrm{MEAN}
    \sim \mu(0.25, 0.75) \times \mathrm{NCHANNELS}`, note that for our
@@ -453,7 +452,9 @@ the following parameters:
    ensures that even the wider component can be fit within the
    spectrum.
 
-6. ``TRAINING_SET`` : True, determines whether the decomposition "true answers" are sotred along with the synthetic spectra for accuracy verification in training.
+6. ``TRAINING_SET`` : True, determines whether the decomposition "true answers"
+   are sorted along with the synthetic spectra for accuracy verification in
+   training.
 
 7. ``FILENAME`` : filename for storing the synthetically-constructed data
 
@@ -507,7 +508,7 @@ With the above parameters specified, we can proceed with constructing a set of s
         fwhms = []
         means = []
 
-        for comp in range(ncomps):
+        for comp in range(NCOMPS):
             # Select random values for components within specified ranges
             a = np.random.uniform(AMP_lims[0], AMP_lims[1])
             w = np.random.uniform(FWHM_lims[0], FWHM_lims[1])
