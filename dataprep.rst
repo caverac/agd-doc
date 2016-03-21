@@ -178,16 +178,20 @@ possible.
     pickle.dump(gausspy_data, open(FILENAME_TRAIN, 'w'))
 
 
-Training AGD to Select Alpha values
+Training AGD to Select :math:`\alpha` values
 ----------------------------
 
-With a synthetic training dataset in hand, we train AGD to select two values of :math:`\alpha` for the two-phase decomposition, :math:`\alpha_1` and :math:`\alpha_2`. The necessary parameters to specify are:
+With a synthetic training dataset in hand, we train AGD to select two values of
+:math:`\alpha` for the two-phase decomposition, :math:`\alpha_1` and
+:math:`\alpha_2`. The necessary parameters to specify are:
 
-1. ``FILENAME``: the pickle file containing the training dataset in GaussPy format.
+1. ``FILENAME_TRAIN``: the pickle file containing the training dataset in GaussPy
+   format
 
 2. ``snr_thresh``: the signal to noise ratio below which GaussPy will not fit a component
 
-3. :math:`\alpha_{1i},\,\alpha_{2i}`: initial choices of the two :math:`\alpha` parameters
+3. ``alpha1_initial, alpha2_initial`` initial choices of the two :math:`\alpha`
+   parameters
 
 .. code-block:: python
 
@@ -198,15 +202,15 @@ With a synthetic training dataset in hand, we train AGD to select two values of 
     reload(gp)
 
     # Set necessary parameters
-    FILENAME = 'cube_training_data.pickle'
+    FILENAME_TRAIN = 'cube_training_data.pickle'
     snr_thresh = 5.
-    alpha1_i = 4
-    alpha2_i = 12
+    alpha1_initial = 4
+    alpha2_initial = 12
 
     g = gp.GaussianDecomposer()
 
     # Next, load the training dataset for analysis:
-    g.load_training_data(FILENAME)
+    g.load_training_data(FILENAME_TRAIN)
 
     # Set GaussPy parameters
     g.set('phase', 'two')
@@ -214,7 +218,7 @@ With a synthetic training dataset in hand, we train AGD to select two values of 
     g.set('mode','conv')
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha1_i, alpha2_initial = alpha2_i, plot=False,
+    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial, plot=False,
         verbose = False, mode = 'conv',
         learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
