@@ -67,7 +67,7 @@ here are:
             data['location'] = data.get('location', []) + [location]
 
     # Save decomposition information
-    pickle.dump(data, open(FILENAME_DATA_GAUSSPY, 'w'))
+    pickle.dump(cube, open(FILENAME_DATA_GAUSSPY, 'w'))
 
 The output pickle file from the above example code contains a python dictionary
 with four keys, including the independent and dependent arrays (i.e. channels
