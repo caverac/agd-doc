@@ -77,7 +77,11 @@ channel, and the (x,y) pixel location within the datacube for reference.
 Creating a Synthetic Training Dataset
 ----------------------------
 
-Before decomposing the target dataset, we need to train the AGD algorithm to select the best values of :math:`\alpha` in two-phase decomposition. First, we construct a synthetic training dataset composed of Gaussian components with parameters sampled randomly from ranges that represent the data as closely as possible.
+Before decomposing the target dataset, we need to train the AGD algorithm to
+select the best values of :math:`\alpha` in two-phase decomposition. First, we
+construct a synthetic training dataset composed of Gaussian components with
+parameters sampled randomly from ranges that represent the data as closely as
+possible.
 
 1. ``RMS``: root mean square uncertainty per channel
 
@@ -85,13 +89,17 @@ Before decomposing the target dataset, we need to train the AGD algorithm to sel
 
 3. ``NSPECTRA``: number of spectra to include in the training dataset
 
-4. ``NCOMPS_lims``: range in total number of components to include in each spectrum
+4. ``NCOMPS_lims``: range in total number of components to include in each
+   spectrum
 
-5. ``AMP_lims, FWHM_lims, MEAN_lims``: range of possible Gaussian component values, amplitudes, FWHM and means, from which to build the spectra
+5. ``AMP_lims, FWHM_lims, MEAN_lims``: range of possible Gaussian component
+   values, amplitudes, FWHM and means, from which to build the spectra
 
-6. ``TRAINING_SET`` : True or False, determines whether the decomposition "answers" are stored along with the data for accuracy verification in training.
+6. ``TRAINING_SET`` : True or False, determines whether the decomposition
+   "answers" are stored along with the data for accuracy verification in
+   training
 
-7. ``FILENAME`` : filename for storing the training data
+7. ``FILENAME_TRAIN`` : filename for storing the training data
 
 .. code-block:: python
 
@@ -124,7 +132,7 @@ Before decomposing the target dataset, we need to train the AGD algorithm to sel
     TRAINING_SET = True
 
     # Specify the pickle file to store the results in
-    FILENAME = 'cube_training_data.pickle'
+    FILENAME_TRAIN = 'cube_training_data.pickle'
 
     # Initialize
     gausspy_data = {}
@@ -167,7 +175,7 @@ Before decomposing the target dataset, we need to train the AGD algorithm to sel
             gausspy_data['means'] = gausspy_data.get('means', []) + [means]
 
     # Dump synthetic data into specified filename
-    pickle.dump(gausspy_data, open(FILENAME, 'w'))
+    pickle.dump(gausspy_data, open(FILENAME_TRAIN, 'w'))
 
 
 Training AGD to Select Alpha values
