@@ -6,7 +6,10 @@ Simple Example Tutorial
 
 Constructing a GaussPy-Friendly Dataset
 --------------------------------------
-Before implementing AGD, we first must put data into a format readable by GaussPy. GaussPy requires the indepenent and dependent spectral arrays (e.g., channels and amplitude) and an estimate of the per-channel noise in the specrum.
+
+Before implementing AGD, we first must put data into a format readable by
+GaussPy. GaussPy requires the indepenent and dependent spectral arrays (e.g.,
+channels and amplitude) and an estimate of the per-channel noise in the specrum.
 
 To begin, we can create a simple Gaussian function of the form:
 
@@ -18,17 +21,18 @@ To begin, we can create a simple Gaussian function of the form:
 
 where,
 
-1. ``NCOMPS`` is the number of Gaussian components in each spectrum
+1. ``NCOMPS`` is the number of Gaussian components in each spectrum.
 
 2. ``(AMP, MEAN, FWHM)`` are the amplitude, mean location, and
-   full-width-half-maximum of each Gaussian component
+   full-width-half-maximum of each Gaussian component.
 
-3. ``NCHANNELS`` is the number of channels in the spectrum (sets the resolution)
+3. ``NCHANNELS`` is the number of channels in the spectrum (sets the
+   resolution).
 
 4. ``NOISE`` is the level of noise introduced in each spectrum, described by the root mean square (RMS) noise per channel.
 
-In the next example we will show how to implement this in python. We
-have made the following assumptions:
+In the next example we will show how to implement this in python. We have made
+the following assumptions:
 
 1. ``NCOMPS = 1`` (to begin with a simple, single Gaussian)
 
@@ -37,8 +41,17 @@ have made the following assumptions:
 3. ``NCHANNELS = 512``
 
 4. ``RMS = 0.05``
+   
+.. raw:: latex
 
-The following code describes an example of how to create spectrum with Gaussian shape and store the channels, amplitude and error arrays in a python pickle file to be read later by GaussPy.
+    \clearpage
+
+In Fig. :num:`#simple-gaussian` we display the spectrum with the single Gaussian
+described above.
+
+The following code describes an example of how to create a spectrum with a
+Gaussian shape and store the channels, amplitude and error arrays in a python
+pickle file to be read later by GaussPy.
 
 .. code-block:: python
     # Create simple Gaussian profile with added noise
@@ -74,8 +87,6 @@ The following code describes an example of how to create spectrum with Gaussian 
     gausspy_data['errors'] = gausspy_data.get('errors', []) + [errors]
 
     pickle.dump(gausspy_data, open(FILENAME, 'w'))
-
-In Fig. :num:`#simple-gaussian` we display the simple Gaussian spectrum constructed above.
 
 .. _simple-gaussian:
 
