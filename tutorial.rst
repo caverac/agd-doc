@@ -338,15 +338,22 @@ A plot of the spectrum constructed above is included in Fig.
 
 Running GaussPy
 ----------------
-With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simple-example-tutorial`, we begin by selecting a value of :math:`\alpha` to use in the decomposition. In this case we will select :math:`\alpha=20` to begin with. As before, the important parameters to specify are:
+
+With our GaussPy-friendly dataset, we can now run GaussPy. As in the
+:ref:`simple-example-tutorial`, we begin by selecting a value of :math:`\alpha`
+to use in the decomposition. In this case we will select :math:`\alpha=20` to
+begin with. As before, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`.
 
-2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
+2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude
+   GaussPy will not fit a component.
 
-3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
+3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed,
+   constructed above (or any GaussPy-friendly dataset)
 
-4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from GaussPy.
+4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from
+   GaussPy.
 
 .. code-block:: python
 
@@ -378,7 +385,12 @@ With our GaussPy-friendly dataset, we can now run GaussPy. As in the :ref:`simpl
 Plot Decomposition Results
 ----------------------------
 
-Following the decomposition by GaussPy, we can explore the effect of the choice of :math:`\alpha` on the decomposition. In Fig. :num:`#multiple-gaussians-decomposed`, we have run GaussPy on the multiple-Gaussian dataset constructed above for three values of :math:`\alpha`, including :math:`\alpha=20, \alpha = 4` and :math:`\alpha=10` and plotted the results.
+Following the decomposition by GaussPy, we can explore the effect of the choice
+of :math:`\alpha` on the decomposition. In Fig.
+:num:`#multiple-gaussians-decomposed`, we have run GaussPy on the
+multiple-Gaussian dataset constructed above for three values of :math:`\alpha`,
+including :math:`\alpha=20, \alpha = 4` and :math:`\alpha=10` and plotted the
+results.
 
 .. _multiple-gaussians-decomposed:
 
@@ -390,12 +402,15 @@ Following the decomposition by GaussPy, we can explore the effect of the choice 
 
     Example spectrum containing multiple Gaussian functions with added spectral noise, decomposed using GaussPy for three values of the smoothing parameter :math:`\alpha`.
 
-These results demonstrate that our choice of :math:`\alpha` has a significant effect on the success of the GaussPy model. In order to select the right value of :math:`\alpha` for a given dataset, we need to train the AGD algorithm using a training set. This process is described in the following section.
+These results demonstrate that our choice of :math:`\alpha` has a significant
+effect on the success of the GaussPy model. In order to select the right value
+of :math:`\alpha` for a given dataset, we need to train the AGD algorithm using
+a training set. This process is described in the following section.
 
 .. _training-example:
 
 ======================================
-Training AGD to Select Alpha
+Training AGD to Select :math:`\alpha`
 ======================================
 
 Creating a Synthetic Training Dataset
