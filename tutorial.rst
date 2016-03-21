@@ -698,7 +698,8 @@ flexibilty to use appropriate values of :math:`\alpha` to fit both narrow and
 wide features simultaneously. We will use the same training dataset constructed
 in :ref:`training-example`. We must set the following parameters:
 
-1. ``FILENAME``: the filename of the training dataset in GaussPy-friendly format
+1. ``FILENAME_TRAIN``: the filename of the training dataset in GaussPy-friendly
+   format
 
 2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy
    will not fit components
@@ -717,7 +718,7 @@ we would like to solve for two different values of :math:`\alpha`.
     import gausspy.gp as gp
 
     # Set necessary parameters
-    FILENAME = 'training_data.pickle'
+    FILENAME_TRAIN = 'training_data.pickle'
     snr_thresh = 5.
     alpha1_initial = 12.
     alpha2_initial = 4.
@@ -725,17 +726,16 @@ we would like to solve for two different values of :math:`\alpha`.
     g = gp.GaussianDecomposer()
 
     # Next, load the training dataset for analysis:
-    g.load_training_data(FILENAME)
+    g.load_training_data(FILENAME_TRAIN)
 
     # Set GaussPy parameters
     g.set('phase', 'two')
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
     g.set('mode','conv')
 
-    # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial, plot=False,
-        verbose = False, mode = 'conv',
-        learning_rate = 1.0, eps = 1.0, MAD = 0.1)
+    # Train AGD starting with initial guess for alpha g.train(alpha1_initial =
+    alpha1_initial, alpha2_initial = alpha2_initial, plot=False, verbose =
+    False, mode = 'conv', learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
 Following training, GaussPy converges on values of :math:`\alpha_1 = 10.58` and
 :math:`\alpha_2 = 9.21` in 286 iterations, with an accuracy of 75.3%. Clearly,
