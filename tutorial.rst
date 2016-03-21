@@ -238,8 +238,9 @@ for the fitted Gaussian parameters with AGD.
 
     Example spectrum containing a single Gaussian function with added spectral noise, decomposed using GaussPy.
 
-We can now move on from the simple example above to vary the complexity of the spectra to be decomposed, as well as the effect of different values of :math:`\alpha` on the decomposition.
-
+We can now move on from the simple example above to vary the complexity of the
+spectra to be decomposed, as well as the effect of different values of
+:math:`\alpha` on the decomposition.
 
 .. _multiple-gaussians-tutorial:
 
@@ -250,7 +251,14 @@ Multiple Gaussians Tutorial
 
 Constructing a GaussPy-Friendly Dataset
 --------------------------------------
-As discussed in the :ref:`simple-example-tutorial`, before running GaussPy we must ensure that our data is in a format readable by GaussPy. In particular, for each spectrum, we need to provide the independent and dependent spectral arrays (i.e. channels and amplitudes) and an estimate of the uncertainity per channel. In the following example we will construct a spectrum containing multiple overlapping Gaussian components with added spectral noise, using Equation :eq:`spectra`, and plot the results.
+
+As discussed in the :ref:`simple-example-tutorial`, before running GaussPy we
+must ensure that our data is in a format readable by GaussPy. In particular, for
+each spectrum, we need to provide the independent and dependent spectral arrays
+(i.e. channels and amplitudes) and an estimate of the uncertainity per channel.
+In the following example we will construct a spectrum containing multiple
+overlapping Gaussian components with added spectral noise, using Equation
+:eq:`spectra`, and plot the results.
 
 We will make the following choices for parameters in this example:
 
@@ -266,9 +274,10 @@ We will make the following choices for parameters in this example:
 
 6. ``RMS = 0.05`` : RMS noise per channel
 
-7. ``filename`` : name of file to write output data to
+7. ``FILENAME`` : name of file to write output data to
 
-The following code provides an example of how to construct a Gaussian function with the above parameters and store it in GaussPy-friendly format.
+The following code provides an example of how to construct a Gaussian function
+with the above parameters and store it in GaussPy-friendly format.
 
 .. code-block:: python
 
@@ -314,7 +323,8 @@ The following code provides an example of how to construct a Gaussian function w
 
     pickle.dump(data, open(FILENAME, 'w'))
 
-A plot of the spectrum constructed above is included in Fig. :num:`#multiple-gaussians`.
+A plot of the spectrum constructed above is included in Fig.
+:num:`#multiple-gaussians`.
 
 .. _multiple-gaussians:
 
