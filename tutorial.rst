@@ -416,20 +416,31 @@ Training AGD to Select :math:`\alpha`
 Creating a Synthetic Training Dataset
 ----------------------------
 
-To select the optimal value of the smoothing parameter :math:`\alpha`, you must train the AGD algorithm using a training dataset with known underlying Gaussian decomposition. In other words, you need to have a dataset for which you know (or have an estimate of) the true Gaussian model. This training dataset can be composed of real (i.e. previously analyzed) or synthetically-constructed data, for which you have prior information about the underlying decomposition. This prior information is used to maximize the model accuracy by calibrating the :math:`\alpha` parameter used by AGD.
+To select the optimal value of the smoothing parameter :math:`\alpha`, you must
+train the AGD algorithm using a training dataset with known underlying Gaussian
+decomposition. In other words, you need to have a dataset for which you know (or
+have an estimate of) the true Gaussian model. This training dataset can be
+composed of real (i.e. previously analyzed) or synthetically-constructed data,
+for which you have prior information about the underlying decomposition. This
+prior information is used to maximize the model accuracy by calibrating the
+:math:`\alpha` parameter used by AGD.
 
-Training datasets can be constructed by adding Gaussian functions with parameters drawn from known distributions with known uncertainties. For example, we can create a mock dataset with ``NSPECTRA``-realizations of Equation :eq:`spectra`.
+Training datasets can be constructed by adding Gaussian functions with
+parameters drawn from known distributions with known uncertainties. For example,
+we can create a mock dataset with ``NSPECTRA``-realizations of Equation
+:eq:`spectra`.
 
-In the next example we will show how to implement this in python. For this example we will construct a synthetic training dataset with parameters similar to those found in the :ref:`multiple-gaussians-tutorial` example. We must set the following parameters:
+In the next example we will show how to implement this in python. For this
+example we will construct a synthetic training dataset with parameters similar
+to those found in the :ref:`multiple-gaussians-tutorial` example. We must set
+the following parameters:
 
 1. :math:`\mathrm{NOISE} \sim N(0, {\rm RMS}) + f \times {\rm RMS}`
    with ``RMS=0.05`` and :math:`f=0`
 
 2. ``NCOMPS = 3``
 
-3. ``NCHANNELS = 512`` This number sets the resolution of each
-   spectrum. **Does this number need to be the same for all spectra in
-   AGD?**
+3. ``NCHANNELS = 512`` This number sets the resolution of each spectrum.
 
 4. :math:`\mathrm{AMP} \sim \mu(0.5, 4)`,
    this way we ensure that every spectral feature is above the noise
