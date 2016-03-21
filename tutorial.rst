@@ -609,15 +609,23 @@ component parameters in the training dataset).
 Running GaussPy using Trained :math:`\alpha`
 -------------------------------------------
 
-With a trained value of :math:`\alpha` in hand, we can proceed to decompose our target dataset with AGD. In this example, we will return to the example from the :ref:`multiple-gaussians-tutorial` chapter. Following training, we select a value of :math:`\alpha=9.01`, which decomposed our training dataset with an accuracy of ~70%. As in the :ref:`simple-example-tutorial` and :ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
+With a trained value of :math:`\alpha` in hand, we can proceed to decompose our
+target dataset with AGD. In this example, we will return to the example from the
+:ref:`multiple-gaussians-tutorial` chapter. Following training, we select a
+value of :math:`\alpha=9.01`, which decomposed our training dataset with an
+accuracy of ~70%. As in the :ref:`simple-example-tutorial` and
+:ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
 
-1. ``alpha1``: our choice for the value of :math:`\alpha`.
+1. ``alpha1``: our choice for the value of :math:`\alpha`
 
-2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
+2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude
+   GaussPy will not fit a component
 
-3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed, constructed above (or any GaussPy-friendly dataset)
+3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed,
+   constructed above (or any GaussPy-friendly dataset)
 
-4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from GaussPy.
+4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from
+   GaussPy
 
 .. code-block:: python
 
