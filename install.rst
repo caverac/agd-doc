@@ -4,13 +4,12 @@
 Installation
 ===============
 
-
 ------------
 Dependencies
 ------------
 
-You will need the following packages to run Gausspy. We list the version of each
-package which we know to be compatible with Gausspy.
+You will need the following packages to run GaussPy. We list the version of each
+package which we know to be compatible with GaussPy.
 
 *  `python 2.7 <http://www.numpy.org/>`_
 
