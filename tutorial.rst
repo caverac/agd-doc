@@ -117,6 +117,9 @@ The following is an example code for running GaussPy. We will use the "one-phase
 
 4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from GaussPy.
 
+
+See the Behind the Scenes chapter for a discussion of the mode that GaussPy uses to compute derivatives, which is set here to "conv".
+
 .. code-block:: python
 
     # Decompose simple dataset using AGD
@@ -124,7 +127,7 @@ The following is an example code for running GaussPy. We will use the "one-phase
     import gausspy.gp as gp
 
     # Specify necessary parameters
-    alpha1 = 10.
+    alpha1 = 1.
     snr_thresh = 5.
     FILENAME_DATA = 'simple_gaussian.pickle'
     FILENAME_DATA_DECOMP = 'simple_gaussian_decomposed.pickle'
@@ -136,7 +139,6 @@ The following is an example code for running GaussPy. We will use the "one-phase
     g.set('phase', 'one')
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
     g.set('alpha1', alpha1)
-    g.set('mode','conv')
 
     # Run GaussPy
     data_decomp = g.batch_decomposition(FILENAME_DATA)
@@ -362,7 +364,7 @@ begin with. As before, the important parameters to specify are:
     import gausspy.gp as gp
 
     # Specify necessary parameters
-    alpha1 = 20.
+    alpha1 = 0.5
     snr_thresh = 5.
     FILENAME_DATA = 'multiple_gaussians.pickle'
     FILENAME_DATA_DECOMP = 'multiple_gaussians_decomposed.pickle'
@@ -374,7 +376,6 @@ begin with. As before, the important parameters to specify are:
     g.set('phase', 'one')
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
     g.set('alpha1', alpha1)
-    g.set('mode','conv')
 
     # Run GaussPy
     data_decomp = g.batch_decomposition(FILENAME_DATA)
@@ -557,7 +558,7 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
     # Set necessary parameters
     FILENAME = 'training_data.pickle'
     snr_thresh = 5.
-    alpha_initial = 20.
+    alpha_initial = 1.
 
     g = gp.GaussianDecomposer()
 
@@ -567,43 +568,16 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
     # Set GaussPy parameters
     g.set('phase', 'one')
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
-    g.set('mode','conv')
 
     # Train AGD starting with initial guess for alpha
     g.train(alpha1_initialnitial = alpha_initial, plot=False,
-        verbose = False, mode = 'conv',
-        learning_rate = 1.0, eps = 1.0, MAD = 0.1)
+        verbose = False, learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
-GausspPy will decompose the training dataset with the initial choice of
-:math:`\alpha_{initial}` and compare the results with the known underlying
-decomposition to compute the accuracy of the decomposition. The training process
-will then iteratively change the value of :math:`\alpha_{initial}` and recompute
-the decomposition until the process converges. Convergence is achieved when the
-change between iterations of the reduced :math:`\chi^2` is less than 0.03 for at
-least 10 iterations. The accuracy of the decomposition associated with the
-converged value of :math:`\alpha` is a description of how well GaussPy can
-recover the true underlying decomposition.
+GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_{initial}` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_{initial}` and recompute the decomposition until the process converges.The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
 
-The above training dataset parameters were selected with the
-:ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the
-choice of :math:`\alpha` has a significant effect on the GaussPy decomposition.
-In the training above, when we choose an initial value of
-:math:`\alpha_{initial}=20` the training process converges to
-:math:`\alpha=9.01` with an accuracy of 70.6%, and required 371 iterations.
+The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of:math:`\alpha_{initial}=1.0` the training process converges to :math:`\alpha=1.58` with an accuracy of 68.4%, and required 33 iterations.
 
-To ensure that the training converges on the optimal value of :math:`\alpha` and
-not a local maximum, it is useful to re-run the training process for several
-initial choices of :math:`\alpha`. When we run the above example with an initial
-choice of :math:`\alpha_{initial}=4`, AGD converges to a value of
-:math:`\alpha=8.67` with an accuracy of 70.7% and required 185 iterations. For
-:math:`\alpha_{initial}=10`, the training converges to :math:`\alpha=9.01` with
-an accuracy of 70.6% following 132 iterations. These results indicate that the
-training will converge on a range of :math:`\alpha` values that decompose the
-target spectrum with similar accuracy. Repeating the training with a value of
-:math:`\alpha_{initial}` between 8.67 and 9.01 will converge to
-:math:`\alpha=\alpha_{initial}` within ~30 iterations. (results will vary very
-slightly for each test of the above code, given the random selection of
-component parameters in the training dataset).
+To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_{initial}=3`, AGD converges to a value of :math:`\alpha=1.58` with an accuracy of 68.4% and required 33 iterations. However, this is a relatively simple example and therefore the converged value of alpha is not very sensitive to the initial choice of :math:`\alpha_1`. In the Prepping a Datacube chapter, we will discuss the effects of added complexity.
 
 
 Running GaussPy using Trained :math:`\alpha`
@@ -612,8 +586,8 @@ Running GaussPy using Trained :math:`\alpha`
 With a trained value of :math:`\alpha` in hand, we can proceed to decompose our
 target dataset with AGD. In this example, we will return to the example from the
 :ref:`multiple-gaussians-tutorial` chapter. Following training, we select a
-value of :math:`\alpha=9.01`, which decomposed our training dataset with an
-accuracy of ~70%. As in the :ref:`simple-example-tutorial` and
+value of :math:`\alpha=1.58`, which decomposed our training dataset with an
+accuracy of 68.4%. As in the :ref:`simple-example-tutorial` and
 :ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`
@@ -634,7 +608,7 @@ accuracy of ~70%. As in the :ref:`simple-example-tutorial` and
     import gausspy.gp as gp
 
     # Specify necessary parameters
-    alpha1 = 9.01
+    alpha1 = 1.58
     snr_thresh = 5.
 
     FILENAME_DATA = 'multiple_gaussians.pickle'
@@ -647,7 +621,6 @@ accuracy of ~70%. As in the :ref:`simple-example-tutorial` and
     g.set('phase', 'one')
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
     g.set('alpha1', alpha1)
-    g.set('mode','conv')
 
     # Run GaussPy
     data_decomp = g.batch_decomposition(FILENAME_DATA)
@@ -657,7 +630,7 @@ accuracy of ~70%. As in the :ref:`simple-example-tutorial` and
 
 Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of
 fitting the "Multiple Gaussians" spectrum with a trained value of
-:math:`\alpha=9.01`.
+:math:`\alpha=1.58`.
 
 .. _multiple-gaussians-trained-decomposed:
 
@@ -720,8 +693,8 @@ we would like to solve for two different values of :math:`\alpha`.
     # Set necessary parameters
     FILENAME_TRAIN = 'training_data.pickle'
     snr_thresh = 5.
-    alpha1_initial = 12.
-    alpha2_initial = 4.
+    alpha1_initial = 0.5
+    alpha2_initial = 2.
 
     g = gp.GaussianDecomposer()
 
@@ -731,14 +704,12 @@ we would like to solve for two different values of :math:`\alpha`.
     # Set GaussPy parameters
     g.set('phase', 'two')
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
-    g.set('mode','conv')
 
-    # Train AGD starting with initial guess for alpha g.train(alpha1_initial =
-    alpha1_initial, alpha2_initial = alpha2_initial, plot=False, verbose =
-    False, mode = 'conv', learning_rate = 1.0, eps = 1.0, MAD = 0.1)
+    # Train AGD starting with initial guess for alpha
+    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial, plot=False, verbose = False, learning_rate = 1.0, eps = 1.0, MAD = 0.1)
 
-Following training, GaussPy converges on values of :math:`\alpha_1 = 10.58` and
-:math:`\alpha_2 = 9.21` in 286 iterations, with an accuracy of 75.3%. Clearly,
+Following training, GaussPy converges on values of :math:`\alpha_1 = 0.39` and
+:math:`\alpha_2 = 2.32` in 39 iterations, with an accuracy of 76.0%. Clearly,
 the two-phase decomposition improves the accuracy of the decomposition, of
 course at the expense of introducing a second free parameter in the
 decomposition. In general, for datasets containing more than one type of
