@@ -202,10 +202,15 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
+#latex_documents = [
+#  ('index', 'GaussPy.tex', u'GaussPy Documentation',
+#   u'Robert Lindner, Carlos Vera-Ciro, Claire Murray, Elijah Bernstein-Cooper', 'manual'),
+#]
 latex_documents = [
   ('index', 'GaussPy.tex', u'GaussPy Documentation',
-   u'Robert Lindner, Carlos Vera-Ciro, Claire Murray, Elijah Bernstein-Cooper', 'manual'),
+   u'R. Lindner, C. Vera-Ciro, C. Murray, E. Bernstein-Cooper', 'manual'),
 ]
+
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
