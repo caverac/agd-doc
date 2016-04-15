@@ -6,7 +6,6 @@
 Welcome to GaussPy's documentation!
 ===================================
 
-Contents:
 
 .. toctree::
    :maxdepth: 2
