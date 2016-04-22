@@ -93,13 +93,13 @@ download each dependency and install from source in the following way:
 where `<library>` is each package in `libblas-dev liblapack-dev gfortran
 libgsl0-dev libhdf5-serial-dev install hdf5-tools` as well as `python-pip`.
 After dependencies are installed, you can install the Python packages with the
---user option in pip
+--user option in pip:
 
 .. code-block:: bash
 
     pip install --user scipy numpy h5py lmfit
 
-and the optional plotting package
+and the optional plotting package:
     
 .. code-block:: bash
 
@@ -110,7 +110,7 @@ Installing Dependencies on OSX
 ------------------------------
 
 Installation on OSX can be done easily with homebrew. First install the external
-dependencies
+dependencies:
 
 .. code-block:: bash
 
@@ -133,6 +133,9 @@ Install the optional dependencies for plotting:
 .. code-block:: bash
 
     sudo pip install matplotlib
+
+This documentation currently does not support instructions for installing
+Gausspy on OSX without root access.
 
 ------------------
 Installing GaussPy
