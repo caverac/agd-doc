@@ -33,7 +33,7 @@ Optional Dependencies
 If you wish to use GaussPy's plotting capabilities you will need to install
 `matplotlib`:
 
-* `matplotlib (\> v1.1.1) <http://matplotlib.org/>`_
+* `matplotlib (v1.1.1) <http://matplotlib.org/>`_
 
 If you wish to use optimization with Fortran code you will need
 
