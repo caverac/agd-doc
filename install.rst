@@ -109,8 +109,14 @@ and the optional plotting package
 Installing Dependencies on OSX
 ------------------------------
 
-Installation on OSX can be done easily with homebrew. Install pip for easy
-installation of python packages:
+Installation on OSX can be done easily with homebrew. First install the external
+dependencies
+
+.. code-block:: bash
+
+    sudo brew install gsl
+
+Install pip for easy installation of python packages:
 
 .. code-block:: bash
 
@@ -122,12 +128,11 @@ Then install the required python packages:
 
     sudo pip install numpy scipy h5py lmfit
 
-Install the optional dependencies for plotting and optimization:
+Install the optional dependencies for plotting:
 
 .. code-block:: bash
 
     sudo pip install matplotlib
-    sudo brew install gsl
 
 ------------------
 Installing GaussPy
