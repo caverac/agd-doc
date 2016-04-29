@@ -168,3 +168,55 @@ In order to circumvent this issue ``GaussPy`` can be trainend in
 components. The result then is two independent values :math:`\alpha_1`
 and :math:`\alpha_2` each giving information about the scales of
 different features in the target function.
+
+An alternative approach
+-----------------------
+
+There is another alternative for calculating derivatives of
+noise-ridden data, namely convolving the function with a low-pass
+filter kernel, e.g., a Gaussian filter. Although the size of the
+filter can be optimized by using a training routine, in a similar
+fashion as we did for the :math:`\alpha` scales, this technique is much
+more agressive and could lead to losses of important features in the
+signal. Indeed, the total variation scheme that ``GaussPy`` uses could
+be thought of as the first order approximation in a perturbative
+expansion of a Gaussian filter.
+
+Notwhistanding this caveat ``GaussPy`` implements also a Gaussian
+filter as an option for taking the numerical derivatives. In total,
+there are three selectable ``modes`` within the package for
+calculating :math:`f(x) + n(x)` 
+
+
+* ``GaussianDecomposer.set('mode','python')``: This will execute
+  ``GaussPy`` with a ``Python`` implementation of the total variation
+  algorithm. The code is clean to read, easy to understand and modify,
+  but it may perform slow for large datasets.
+
+
+* ``GaussianDecomposer.set('mode','C')``: This chooses a ``C``
+  implementation of the TV algorithm when calculating the
+  derivative. It is less time-consuming that the ``Python`` version
+  but comes at the price of intelligibility of some parts of the
+  code. 
+
+  Both ``Python`` and ``C`` modes yield the same results and,
+  therefore, are interchangable. Our suggestion is to use ``Python``
+  if you are planning to delve into the details of the code, and ``C``
+  if you are after efficiency in large dataset.
+
+* ``GaussianDecomposer.set('mode','conv')``: When this mode is set,
+  the function is Gaussian-filtered prior to calculating the numerical
+  derivative. In this case, the constant :math:`\alpha` is taken to be
+  the size of the kernel
+
+  .. math:: \tilde{f}(x) = (f \star K_\alpha)(x) \quad\mbox{with}\quad
+	  K_\alpha(x) = \frac{1}{\sqrt{2\pi \alpha^2}}{\rm e}^{-x^2/2\alpha^2}.
+     :label: kernel
+
+  Once this mode is selected the training for choosing the optimal
+  size of the filter proceeds in the same way we have discussed in the
+  previous sections, i.e., nothing else has to be changed.
+
+
+
