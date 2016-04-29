@@ -60,8 +60,6 @@ here are:
             # get the spectrum location
             location = np.array((i, j))
 
-            print location
-
             # Enter results into GaussPy-friendly dataset
             data['data_list'] = data.get('data_list', []) + [spectrum]
             data['x_values'] = data.get('x_values', []) + [chan]
@@ -77,7 +75,7 @@ and spectral values), an array per spectrum describing the uncertainty per
 channel, and the (x,y) pixel location within the datacube for reference.
 
 Creating a Synthetic Training Dataset
-----------------------------
+-------------------------------------
 
 Before decomposing the target dataset, we need to train the AGD algorithm to
 select the best values of :math:`\alpha` in two-phase decomposition. First, we
@@ -218,12 +216,9 @@ With a synthetic training dataset in hand, we train AGD to select two values of
     # Set GaussPy parameters
     g.set('phase', 'two')
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
-    g.set('mode','conv')
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial, plot=False,
-        verbose = False, mode = 'conv',
-        learning_rate = 1.0, eps = 1.0, MAD = 0.1)
+    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial)
 
 Training: starting with values of :math:`\alpha_{1,initial}=3` and
 :math:`\alpha_{2,initial}=12`, the training process converges to
@@ -257,7 +252,6 @@ With the trained values in hand, we now decompose the target dataset:
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
     g.set('alpha1', alpha1)
     g.set('alpha2', alpha2)
-    g.set('mode','conv')
 
     # Run GaussPy
     decomposed_data = g.batch_decomposition(FILENAME_DATA_GAUSSPY)

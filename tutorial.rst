@@ -55,7 +55,7 @@ described above.
 
     Example spectrum containing a single Gaussian function with added spectral noise.
 
-See the following code which describes an example of how to create a spectrum
+The following code describes an example of how to create a spectrum
 with a Gaussian shape and store the channels, amplitude and error arrays in a
 python pickle file to be read later by GaussPy.
 
@@ -103,8 +103,8 @@ Running GaussPy
 
 With our simple dataset in hand, we can use GaussPy to decompose the spectrum
 into Gaussian functions. To do this, we must specify the smoothing parameter
-:math:`\alpha`. For now, we will guess a value of :math:`\alpha=10`. Later in
-this chapter we will learn about training AGD to select the optimal value of
+:math:`\alpha`. For now, we will guess a value of :math:`\alpha=1`. In later chapters
+we will discuss training the AGD algorithm to select the optimal value of
 :math:`\alpha`.
 
 The following is an example code for running GaussPy. We will use the "one-phase" decomposition to begin with. We must specify the following parameters:
@@ -117,8 +117,6 @@ The following is an example code for running GaussPy. We will use the "one-phase
 
 4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from GaussPy.
 
-
-See the Behind the Scenes chapter for a discussion of the mode that GaussPy uses to compute derivatives, which is set here to "conv".
 
 .. code-block:: python
 
@@ -240,9 +238,7 @@ for the fitted Gaussian parameters with AGD.
 
     Example spectrum containing a single Gaussian function with added spectral noise, decomposed using GaussPy.
 
-We can now move on from the simple example above to vary the complexity of the
-spectra to be decomposed, as well as the effect of different values of
-:math:`\alpha` on the decomposition.
+In the ensuing chapters, we will move on from this simple example to consider spectra of increased complexity, as well as the effect of different values of :math:`\alpha` on the decomposition.
 
 .. _multiple-gaussians-tutorial:
 
@@ -268,9 +264,9 @@ We will make the following choices for parameters in this example:
 
 2. ``AMPS = [3,2,1]`` : amplitudes of the included Gaussian functions
 
-3. ``FWHMS = [10,20,30]`` : FWHM (in channels) of the included Gaussian functions
+3. ``FWHMS = [20,50,40]`` : FWHM (in channels) of the included Gaussian functions
 
-4. ``MEANS = [10,20,30]`` : mean positions (in channels) of the included Gaussian functions
+4. ``MEANS = [220,250,300]`` : mean positions (in channels) of the included Gaussian functions
 
 5. ``NCHANNELS = 512`` : number of channels in the spectrum
 
@@ -343,7 +339,7 @@ Running GaussPy
 
 With our GaussPy-friendly dataset, we can now run GaussPy. As in the
 :ref:`simple-example-tutorial`, we begin by selecting a value of :math:`\alpha`
-to use in the decomposition. In this case we will select :math:`\alpha=20` to
+to use in the decomposition. In this example, we will select :math:`\alpha=0.5` to
 begin with. As before, the important parameters to specify are:
 
 1. ``alpha1``: our choice for the value of :math:`\alpha`.
@@ -354,7 +350,7 @@ begin with. As before, the important parameters to specify are:
 3. ``FILENAME_DATA``: the filename containing the dataset to-be-decomposed,
    constructed above (or any GaussPy-friendly dataset)
 
-4. ``FILENAME_DATA_DECOMP``: filename to store the decomposition results from
+4. ``FILENAME_DATA_DECOMP``: the filename to store the decomposition results from
    GaussPy.
 
 .. code-block:: python
@@ -390,7 +386,7 @@ Following the decomposition by GaussPy, we can explore the effect of the choice
 of :math:`\alpha` on the decomposition. In Fig.
 :num:`#multiple-gaussians-decomposed`, we have run GaussPy on the
 multiple-Gaussian dataset constructed above for three values of :math:`\alpha`,
-including :math:`\alpha=20, \alpha = 4` and :math:`\alpha=10` and plotted the
+including :math:`\alpha=0.5, \alpha = 2.5` and :math:`\alpha=1.5` and plotted the
 results.
 
 .. _multiple-gaussians-decomposed:
@@ -410,9 +406,9 @@ a training set. This process is described in the following section.
 
 .. _training-example:
 
-======================================
-Training AGD to Select :math:`\alpha`
-======================================
+==============
+Training AGD
+==============
 
 Creating a Synthetic Training Dataset
 ----------------------------
@@ -441,17 +437,16 @@ the following parameters:
 
 2. ``NCOMPS = 3``
 
-3. ``NCHANNELS = 512`` This number sets the resolution of each spectrum.
+3. ``NCHANNELS = 512`` : the number of channels per spectrum
 
-4. :math:`\mathrm{AMP} \sim \mu(0.5, 4)`, this way we ensure that every spectral
-   feature is above the noise level. Spectra with a more dominant contribution
-   from the noise can also be generated and used as training sets for AGD
+4. ``RMS = 0.05`` : RMS noise per channel.
 
-5. :math:`\mathrm{FWHM} \sim \mu(20, 80)` and :math:`\mathrm{MEAN}
-   \sim \mu(0.25, 0.75) \times \mathrm{NCHANNELS}`, note that for our
-   choice of the number of channels, this selection of ``FWHM``
-   ensures that even the wider component can be fit within the
-   spectrum.
+5. ``NSPECTRA = 200`` : number of synthetic spectra to create for the training dataset.
+
+4. :math:`\mathrm{AMP} \sim \mu(0.5, 4)` : the possible range of amplitudes to be included in each synthetic spectrum. Spectra with a more dominant contribution
+   from the noise can also be generated and used as training sets for AGD.
+
+5. :math:`\mathrm{FWHM} \sim \mu(20, 80)` and :math:`\mathrm{MEAN}\sim \mu(0.25, 0.75) \times \mathrm{NCHANNELS}` : the possible range of FWHM and mean positions of Gaussian functions to be included in each synthetic spectrum.
 
 6. ``TRAINING_SET`` : True, determines whether the decomposition "true answers"
    are sorted along with the synthetic spectra for accuracy verification in
@@ -570,14 +565,13 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initialnitial = alpha_initial, plot=False,
-        verbose = False, learning_rate = 1.0, eps = 1.0, MAD = 0.1)
+    g.train(alpha1_initialnitial = alpha_initial)
 
-GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_{initial}` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_{initial}` and recompute the decomposition until the process converges.The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
+GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_{\rm initial}` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_{\rm initial}` and recompute the decomposition until the process converges.The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
 
-The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of:math:`\alpha_{initial}=1.0` the training process converges to :math:`\alpha=1.58` with an accuracy of 68.4%, and required 33 iterations.
+The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of :math:`\alpha_{\rm initial}=1.0` the training process converges to :math:`\alpha=1.58` with an accuracy of 68.4%, and required 33 iterations.
 
-To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_{initial}=3`, AGD converges to a value of :math:`\alpha=1.58` with an accuracy of 68.4% and required 33 iterations. However, this is a relatively simple example and therefore the converged value of alpha is not very sensitive to the initial choice of :math:`\alpha_1`. In the Prepping a Datacube chapter, we will discuss the effects of added complexity.
+To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_{initial}=3`, AGD converges to a value of :math:`\alpha=1.58` with an accuracy of 68.4% and required 33 iterations. However, this is a relatively simple example and therefore the converged value of alpha is not very sensitive to :math:`\alpha_{\rm initial}`. In the Prepping a Datacube chapter, we will discuss the effects of added complexity.
 
 
 Running GaussPy using Trained :math:`\alpha`
@@ -706,7 +700,7 @@ we would like to solve for two different values of :math:`\alpha`.
     g.set('SNR_thresh', [snr_thresh, snr_thresh])
 
     # Train AGD starting with initial guess for alpha
-    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial, plot=False, verbose = False, learning_rate = 1.0, eps = 1.0, MAD = 0.1)
+    g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial)
 
 Following training, GaussPy converges on values of :math:`\alpha_1 = 0.39` and
 :math:`\alpha_2 = 2.32` in 39 iterations, with an accuracy of 76.0%. Clearly,
