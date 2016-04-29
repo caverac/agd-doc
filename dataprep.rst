@@ -220,8 +220,8 @@ With a synthetic training dataset in hand, we train AGD to select two values of
     # Train AGD starting with initial guess for alpha
     g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial)
 
-Training: starting with values of :math:`\log\alpha_{1,initial}=3` and
-:math:`\log\alpha_{2,initial}=12`, the training process converges to
+Training: starting with values of :math:`\log\alpha_{1,\rm \, initial}=3` and
+:math:`\log\alpha_{2,\rm \, initial}=12`, the training process converges to
 :math:`\log\alpha_1=2.87` and :math:`\log\alpha_2=10.61` with an accuracy of 71.2%
 within 90 iterations.
 
