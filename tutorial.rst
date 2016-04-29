@@ -103,13 +103,14 @@ Running GaussPy
 
 With our simple dataset in hand, we can use GaussPy to decompose the spectrum
 into Gaussian functions. To do this, we must specify the smoothing parameter
-:math:`\alpha`. For now, we will guess a value of :math:`\alpha=1`. In later chapters
+:math:`\alpha` (see Behind the Scenes chapter for more details). For now, we
+will guess a value of :math:`\log\alpha=1`. In later chapters
 we will discuss training the AGD algorithm to select the optimal value of
 :math:`\alpha`.
 
 The following is an example code for running GaussPy. We will use the "one-phase" decomposition to begin with. We must specify the following parameters:
 
-1. ``alpha1``: our choice for the value of :math:`\alpha`.
+1. ``alpha1``: our choice for the value of :math:`\log\alpha`.
 
 2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude GaussPy will not fit a component.
 
@@ -207,7 +208,7 @@ The following is an example python script for plotting the original spectrum and
         ax.plot(chan, component, color='red', lw=1.5)
 
     ax.plot(chan, spectrum, label='Data', color='black', linewidth=1.5)
-    ax.plot(chan, model, label = r'$\alpha=10.$', color='purple', linewidth=2.)
+    ax.plot(chan, model, label = r'$\log\alpha=1.$', color='purple', linewidth=2.)
     ax.plot(chan, errors, label = 'Errors', color='green', linestyle='dashed', linewidth=2.)
 
     ax.set_xlabel('Channels')
@@ -222,7 +223,7 @@ The following is an example python script for plotting the original spectrum and
 
 Fig. :num:`#simple-gaussian-decomposed` displays the results of the
 decomposition using the above example python code. Clearly the fit to the simple
-Gaussian spectrum is good. If we were to vary the value of :math:`\alpha`, the
+Gaussian spectrum is good. If we were to vary the value of :math:`\log\alpha`, the
 fit would not change significantly as the fit to a spectrum containing a single
 Gaussian funciton does not depend sensitively on the initial guesses, especially
 because GaussPy performs a least-squares fit after determining initial guesses
@@ -339,10 +340,10 @@ Running GaussPy
 
 With our GaussPy-friendly dataset, we can now run GaussPy. As in the
 :ref:`simple-example-tutorial`, we begin by selecting a value of :math:`\alpha`
-to use in the decomposition. In this example, we will select :math:`\alpha=0.5` to
+to use in the decomposition. In this example, we will select :math:`\log\alpha=0.5` to
 begin with. As before, the important parameters to specify are:
 
-1. ``alpha1``: our choice for the value of :math:`\alpha`.
+1. ``alpha1``: our choice for the value of :math:`\log\alpha`.
 
 2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude
    GaussPy will not fit a component.
@@ -386,7 +387,7 @@ Following the decomposition by GaussPy, we can explore the effect of the choice
 of :math:`\alpha` on the decomposition. In Fig.
 :num:`#multiple-gaussians-decomposed`, we have run GaussPy on the
 multiple-Gaussian dataset constructed above for three values of :math:`\alpha`,
-including :math:`\alpha=0.5, \alpha = 2.5` and :math:`\alpha=1.5` and plotted the
+including :math:`\log\alpha=0.5, \log\alpha = 2.5` and :math:`\log\alpha=1.5` and plotted the
 results.
 
 .. _multiple-gaussians-decomposed:
@@ -397,10 +398,10 @@ results.
     :figclass: align-center
     :alt: alternate text
 
-    Example spectrum containing multiple Gaussian functions with added spectral noise, decomposed using GaussPy for three values of the smoothing parameter :math:`\alpha`.
+    Example spectrum containing multiple Gaussian functions with added spectral noise, decomposed using GaussPy for three values of the smoothing parameter :math:`\log\alpha`.
 
 These results demonstrate that our choice of :math:`\alpha` has a significant
-effect on the success of the GaussPy model. In order to select the right value
+effect on the success of the GaussPy model. In order to select the best value
 of :math:`\alpha` for a given dataset, we need to train the AGD algorithm using
 a training set. This process is described in the following section.
 
@@ -542,7 +543,7 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy will not fit components.
 
-3. ``alpha_initial``: initial choice for :math:`\alpha`
+3. ``alpha_initial``: initial choice for :math:`\log\alpha`
 
 .. code-block:: python
 
@@ -569,9 +570,9 @@ Next, we will apply GaussPy to the real or synthetic training dataset and compar
 
 GausspPy will decompose the training dataset with the initial choice of :math:`\alpha_{\rm initial}` and compare the results with the known underlying decomposition to compute the accuracy of the decomposition. The training process will then iteratively change the value of :math:`\alpha_{\rm initial}` and recompute the decomposition until the process converges.The accuracy of the decomposition associated with the converged value of :math:`\alpha` is a description of how well GaussPy can recover the true underlying decomposition.
 
-The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of :math:`\alpha_{\rm initial}=1.0` the training process converges to :math:`\alpha=1.58` with an accuracy of 68.4%, and required 33 iterations.
+The above training dataset parameters were selected with the :ref:`multiple-gaussians-tutorial` in mind. As we saw in that example, the choice of :math:`\alpha` has a significant effect on the GaussPy decomposition. In the training above, when we choose an initial value of :math:`\log\alpha_{\rm initial}=1.0` the training process converges to :math:`\log\alpha=1.58` with an accuracy of 68.4%, and required 33 iterations.
 
-To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several initial choices of :math:`\alpha`. When we run the above example with an initial choice of :math:`\alpha_{initial}=3`, AGD converges to a value of :math:`\alpha=1.58` with an accuracy of 68.4% and required 33 iterations. However, this is a relatively simple example and therefore the converged value of alpha is not very sensitive to :math:`\alpha_{\rm initial}`. In the Prepping a Datacube chapter, we will discuss the effects of added complexity.
+To ensure that the training converges on the optimal value of :math:`\alpha` and not a local maximum, it is useful to re-run the training process for several choices of :math:`\alpha_{\rm initial}`. When we run the above example with an initial choice of :math:`\log\alpha_{initial}=3`, AGD converges to a value of :math:`\log\alpha=1.58` with an accuracy of 68.4% and required 33 iterations. However, this is a relatively simple example and therefore the converged value of alpha is not very sensitive to :math:`\alpha_{\rm initial}`. In the Prepping a Datacube chapter, we will discuss the effects of added complexity.
 
 
 Running GaussPy using Trained :math:`\alpha`
@@ -580,11 +581,11 @@ Running GaussPy using Trained :math:`\alpha`
 With a trained value of :math:`\alpha` in hand, we can proceed to decompose our
 target dataset with AGD. In this example, we will return to the example from the
 :ref:`multiple-gaussians-tutorial` chapter. Following training, we select a
-value of :math:`\alpha=1.58`, which decomposed our training dataset with an
+value of :math:`\log\alpha=1.58`, which decomposed our training dataset with an
 accuracy of 68.4%. As in the :ref:`simple-example-tutorial` and
 :ref:`multiple-gaussians-tutorial`, the important parameters to specify are:
 
-1. ``alpha1``: our choice for the value of :math:`\alpha`
+1. ``alpha1``: our choice for the value of :math:`\log\alpha`
 
 2. ``snr_thresh``: the signal-to-noise ratio threshold below which amplitude
    GaussPy will not fit a component
@@ -624,7 +625,7 @@ accuracy of 68.4%. As in the :ref:`simple-example-tutorial` and
 
 Fig. :num:`#multiple-gaussians-trained-decomposed` displays the result of
 fitting the "Multiple Gaussians" spectrum with a trained value of
-:math:`\alpha=1.58`.
+:math:`\log\alpha=1.58`.
 
 .. _multiple-gaussians-trained-decomposed:
 
@@ -671,8 +672,8 @@ in :ref:`training-example`. We must set the following parameters:
 2. ``snr_thresh``: the signal-to-noise threshold below which amplitude GaussPy
    will not fit components
 
-3. ``alpha1_initial, alpha2_initial```: initial choices for :math:`\alpha_1` and
-   :math:`\alpha_2`
+3. ``alpha1_initial, alpha2_initial```: initial choices for :math:`\log\alpha_1` and
+   :math:`\log\alpha_2`
 
 The training will be the same as in :ref:`training-example`, however we will set
 the GaussPy parameter `phase` equal to `two` instead of `one` to indicate that
@@ -702,8 +703,8 @@ we would like to solve for two different values of :math:`\alpha`.
     # Train AGD starting with initial guess for alpha
     g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial)
 
-Following training, GaussPy converges on values of :math:`\alpha_1 = 0.39` and
-:math:`\alpha_2 = 2.32` in 39 iterations, with an accuracy of 76.0%. Clearly,
+Following training, GaussPy converges on values of :math:`\log\alpha_1 = 0.39` and
+:math:`\log\alpha_2 = 2.32` in 39 iterations, with an accuracy of 76.0%. Clearly,
 the two-phase decomposition improves the accuracy of the decomposition, of
 course at the expense of introducing a second free parameter in the
 decomposition. In general, for datasets containing more than one type of

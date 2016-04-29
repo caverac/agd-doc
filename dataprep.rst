@@ -78,7 +78,7 @@ Creating a Synthetic Training Dataset
 -------------------------------------
 
 Before decomposing the target dataset, we need to train the AGD algorithm to
-select the best values of :math:`\alpha` in two-phase decomposition. First, we
+select the best values of :math:`\log\alpha` in two-phase decomposition. First, we
 construct a synthetic training dataset composed of Gaussian components with
 parameters sampled randomly from ranges that represent the data as closely as
 possible.
@@ -182,8 +182,8 @@ Training AGD to Select :math:`\alpha` values
 ----------------------------
 
 With a synthetic training dataset in hand, we train AGD to select two values of
-:math:`\alpha` for the two-phase decomposition, :math:`\alpha_1` and
-:math:`\alpha_2`. The necessary parameters to specify are:
+:math:`\log\alpha` for the two-phase decomposition, :math:`\log\alpha_1` and
+:math:`\log\alpha_2`. The necessary parameters to specify are:
 
 1. ``FILENAME_TRAIN``: the pickle file containing the training dataset in GaussPy
    format
@@ -191,7 +191,7 @@ With a synthetic training dataset in hand, we train AGD to select two values of
 2. ``snr_thresh``: the signal to noise ratio below which GaussPy will not fit a
    component
 
-3. ``alpha1_initial, alpha2_initial`` initial choices of the two :math:`\alpha`
+3. ``alpha1_initial, alpha2_initial`` initial choices of the two :math:`\log\alpha`
    parameters
 
 .. code-block:: python
@@ -220,9 +220,9 @@ With a synthetic training dataset in hand, we train AGD to select two values of
     # Train AGD starting with initial guess for alpha
     g.train(alpha1_initial = alpha1_initial, alpha2_initial = alpha2_initial)
 
-Training: starting with values of :math:`\alpha_{1,initial}=3` and
-:math:`\alpha_{2,initial}=12`, the training process converges to
-:math:`\alpha_1=2.87` and :math:`\alpha_2=10.61` with an accuracy of 71.2%
+Training: starting with values of :math:`\log\alpha_{1,initial}=3` and
+:math:`\log\alpha_{2,initial}=12`, the training process converges to
+:math:`\log\alpha_1=2.87` and :math:`\log\alpha_2=10.61` with an accuracy of 71.2%
 within 90 iterations.
 
 Decomposing the Datacube
@@ -309,8 +309,8 @@ how well the decomposition went.
     plt.show()
 
 Fig. :num:`#cube-decomposed` displays an example set of spectra from the data
-cube and the GaussPy decomposition using trained values of :math:`\alpha_1=2.87`
-and :math:`\alpha_2=10.61`.
+cube and the GaussPy decomposition using trained values of :math:`\log\alpha_1=2.87`
+and :math:`\log\alpha_2=10.61`.
 
 .. _cube-decomposed:
 
@@ -320,6 +320,7 @@ and :math:`\alpha_2=10.61`.
     :figclass: align-center
     :alt: alternate text
 
+    Example spectra from the GALFA-HI M33 datacube, decomposed by GaussPy following two-phase training.
 
 
 
